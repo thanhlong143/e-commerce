@@ -137,7 +137,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     await user.save();
     return res.status(200).json({
         success: user ? true : false,
-        message: user ? 'Updated password' : 'Something went wrong'
+        message: user ? 'Updated password' : 'Something went wrong' 
     })
 })
 
