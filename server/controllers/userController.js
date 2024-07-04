@@ -109,5 +109,7 @@ module.exports = {
     login,
     getCurrent,
     refreshAccessToken,
-    logout
+    logout,
+    forgotPassword,
+    
 }
