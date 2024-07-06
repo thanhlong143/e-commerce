@@ -100,6 +100,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 const ratings = asyncHandler(async (req, res) => {
     const { _id } = req.user;
+    console.log(_id);
     const { star, comment, pid } = req.body;
     if (!star || !pid) {
         throw new Error('Missing inputs');
