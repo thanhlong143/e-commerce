@@ -9,9 +9,7 @@ export const appSlice = createSlice({
     },
 
     reducers: {
-        // logout: (state) => {
-        //     state.isLoading = false
-        // }
+        
     },
 
     extraReducers: (builder) => {
@@ -31,6 +29,6 @@ export const appSlice = createSlice({
     }
 });
 
-export const {} = appSlice.actions;
+// export const { } = appSlice.actions;
 
 export default appSlice.reducer;

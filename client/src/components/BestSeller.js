@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { apiGetProducts } from "../apis/product";
-import { Product } from "./index";
+import { Product } from "./";
 import Slider from "react-slick";
+import smallBanner1 from '../assets/small-banner-1.png';
+import smallBanner2 from '../assets/small-banner-2.png';
 
 const tabs = [
     { id: 1, name: 'best seller' },
@@ -60,11 +62,16 @@ const BestSeller = () => {
                     {products?.map(el => (
                         <Product
                             key={el.id}
+                            pid={el.id}
                             productData={el}
                             isNew={activedTab === 1 ? false : true}
                         />
                     ))}
                 </Slider>
+            </div>
+            <div className="w-full flex gap-4 mt-4">
+                <img src={smallBanner1} alt="small-banner-1" className="flex-1 object-contain" />
+                <img src={smallBanner2} alt="small-banner-2" className="flex-1 object-contain" />
             </div>
         </div>
     )
