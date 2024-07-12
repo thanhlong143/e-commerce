@@ -2,7 +2,7 @@ import React from "react";
 import { Sidebar, Banner, BestSeller, DealDaily } from "../../components";
 
 const Home = () => {
-    
+
     return (
         <>
             <div className="w-main flex">

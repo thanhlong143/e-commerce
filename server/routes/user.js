@@ -16,7 +16,7 @@ router.put("/:uid", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
 router.put("/current/address", [verifyAccessToken], ctrls.updateUserAddress);
 router.put("/current/cart", [verifyAccessToken], ctrls.updateUserCart);
 
-module.exports = router;        
+module.exports = router;
 
 // CREATE (POST) + PUT - body
 // GET DELETE - query // ?zsdsf&sfdsf

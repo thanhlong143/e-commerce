@@ -10,7 +10,7 @@ const createCategory = asyncHandler(async (req, res) => {
         const newCategory = await BlogCategory.create(req.body);
         return res.json({
             success: newCategory ? true : false,
-            createdCategory: newCategory ? newCategory : "Cannot create new blog-category"
+            createdCategory: newCategory ? newCategory : "Cannot create new blog category"
         });
     }
 });
@@ -55,6 +55,5 @@ module.exports = {
     createCategory,
     getCategories,
     updateCategory,
-    deleteCategory,
-
+    deleteCategory
 }

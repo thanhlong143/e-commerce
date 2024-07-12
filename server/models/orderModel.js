@@ -9,8 +9,8 @@ var orderSchema = new mongoose.Schema({
             color: String
         }
     ],
-    status:{
-        type:String,
+    status: {
+        type: String,
         default: "Processing",
         enum: ["Canceled", "Processing", "Succeed"]
     },

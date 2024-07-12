@@ -14,7 +14,6 @@ export const renderStarFromNumber = (number, size) => {
     for (let i = 0; i < +number; i++) stars.push(<IoIosStar color="orange" size={size} />);
     // for (let i = 0.5; i < +number + 0.5; i++) stars.push(<IoIosStarHalf color="orange" size={size} />);
     for (let i = 5; i > +number; i--) stars.push(<IoIosStarOutline color="orange" size={size} />);
-    
-    
+
     return stars
 }

@@ -36,7 +36,7 @@ const getProducts = asyncHandler(async (req, res) => {
     let queryString = JSON.stringify(queries);
     queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, matchedElement => `$${matchedElement}`);
     const formatedQueries = JSON.parse(queryString);
-    
+
     // Filtering
     if (queries?.title) {
         formatedQueries.title = { $regex: queries.title, $options: "i" }
@@ -60,18 +60,18 @@ const getProducts = asyncHandler(async (req, res) => {
     const skip = (page - 1) * limit;
 
     await Product.find(formatedQueries).skip(skip).limit(limit).select(fields).sort(sortBy)
-    .then(async (response) => {
-        const count = await Product.find(formatedQueries).countDocuments();
-        return res.status(200).json({
-            success: response ? true : false,
-            count,
-            products: response ? response : "Cannot get products",
-        });
-    })
-    .catch((error) => {
-        return error;
-    })
-    
+        .then(async (response) => {
+            const count = await Product.find(formatedQueries).countDocuments();
+            return res.status(200).json({
+                success: response ? true : false,
+                count,
+                products: response ? response : "Cannot get products",
+            });
+        })
+        .catch((error) => {
+            return error;
+        })
+
 });
 
 const updateProduct = asyncHandler(async (req, res) => {

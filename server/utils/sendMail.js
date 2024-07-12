@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const asyncHandler=require('express-async-handler')
+const asyncHandler = require('express-async-handler')
 
 const sendMail = asyncHandler(async ({ email, html }) => {
     const transporter = nodemailer.createTransport({

@@ -20,7 +20,7 @@ const createOrder = asyncHandler(async (req, res) => {
         createData.total = total;
         createData.coupon = coupon;
     }
-    
+
     const result = await Order.create(createData);
     return res.json({
         success: userCart ? true : false,
@@ -51,7 +51,7 @@ const getUserOrders = asyncHandler(async (req, res) => {
 });
 
 const getOrders = asyncHandler(async (req, res) => {
-    const { _id } = req.user;
+    // const { _id } = req.user;
     const response = await Order.find();
     return res.json({
         success: response ? true : false,
