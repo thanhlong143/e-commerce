@@ -3,27 +3,27 @@ import path from "./path"
 export const navigation = [
     {
         id: 1,
-        value: 'HOME',
+        value: "HOME",
         path: `/${path.HOME}`
     },
     {
         id: 2,
-        value: 'PRODUCTS',
+        value: "PRODUCTS",
         path: `/${path.PRODUCTS}`
     },
     {
         id: 3,
-        value: 'BLOGS',
+        value: "BLOGS",
         path: `/${path.BLOGS}`
     },
     {
         id: 4,
-        value: 'OUR_SERVICES',
+        value: "OUR SERVICES",
         path: `/${path.OUR_SERVICES}`
     },
     {
         id: 5,
-        value: 'FAQ',
+        value: "FAQ",
         path: `/${path.FAQ}`
     },
 ]

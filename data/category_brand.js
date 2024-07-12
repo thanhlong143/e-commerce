@@ -1,35 +1,35 @@
 const data = [
     {
-        category: 'Smartphone',
-        brand: ['Apple', 'Samsung', 'LG', 'Asus', 'Nokia', 'BlackBerry']
+        category: "Smartphone",
+        brand: ["Apple", "Samsung", "LG", "Asus", "Nokia", "BlackBerry"]
     },
     {
-        category: 'Tablet',
-        brand: ['iPad', 'Samsung', 'Acer', 'Asus', 'Lenovo', 'Haier']
+        category: "Tablet",
+        brand: ["iPad", "Samsung", "Acer", "Asus", "Lenovo", "Haier"]
     },
     {
-        category: 'Laptop',
-        brand: ['Asus', 'Dell', 'Acer', 'Lenovo', 'HP', 'Macbook']
+        category: "Laptop",
+        brand: ["Asus", "Dell", "Acer", "Lenovo", "HP", "Macbook"]
     },
     {
-        category: 'Speaker',
+        category: "Speaker",
         brand: []
     },
     {
-        category: 'Camera',
+        category: "Camera",
         brand: []
     },
     {
-        category: 'Accessories',
-        brand: ['Smartswatches', 'Headphone', 'Bluetooth', 'Keyboard', 'Mouse', 'Cases']
+        category: "Accessories",
+        brand: ["Smartswatches", "Headphone", "Bluetooth", "Keyboard", "Mouse", "Cases"]
     },
     {
-        category: 'Television',
-        brand: ['Apple', 'Samsung', 'LG', 'Asus', 'Nokia', 'BlackBerry']
+        category: "Television",
+        brand: ["Apple", "Samsung", "LG", "Asus", "Nokia", "BlackBerry"]
     },
     {
-        category: 'Printer',
-        brand: ['Samsung', 'Acer', 'Asus', 'Lenovo', 'Haier']
+        category: "Printer",
+        brand: ["Samsung", "Acer", "Asus", "Lenovo", "Haier"]
     }
 ];
 

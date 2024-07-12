@@ -1,11 +1,11 @@
-const { response } = require('express');
-const Product = require('../models/productModel');
-const asyncHandler = require('express-async-handler');
-const slugify = require('slugify');
+const { response } = require("express");
+const Product = require("../models/productModel");
+const asyncHandler = require("express-async-handler");
+const slugify = require("slugify");
 
 const createProduct = asyncHandler(async (req, res) => {
     if (Object.keys(req.body).length === 0) {
-        throw new Error('Missing inputs');
+        throw new Error("Missing inputs");
     }
     if (req.body && req.body.title) {
         req.body.slug = slugify(req.body.title);
@@ -13,7 +13,7 @@ const createProduct = asyncHandler(async (req, res) => {
     const newProduct = await Product.create(req.body);
     return res.status(200).json({
         success: newProduct ? true : false,
-        createdProduct: newProduct ? newProduct : 'Cannot create new product'
+        createdProduct: newProduct ? newProduct : "Cannot create new product"
     });
 });
 
@@ -22,7 +22,7 @@ const getProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(pid);
     return res.status(200).json({
         success: product ? true : false,
-        productData: product ? product : 'Cannot get product'
+        productData: product ? product : "Cannot get product"
     });
 });
 
@@ -30,7 +30,7 @@ const getProduct = asyncHandler(async (req, res) => {
 const getProducts = asyncHandler(async (req, res) => {
     const queries = { ...req.query };
     // Tách các trường đặc biệt ra khỏi query
-    const excludeFields = ['limit', 'sort', 'page', 'fields'];
+    const excludeFields = ["limit", "sort", "page", "fields"];
     excludeFields.forEach(element => delete queries[element]);
     // Format lại các operators cho đúng cú pháp mongose
     let queryString = JSON.stringify(queries);
@@ -39,19 +39,19 @@ const getProducts = asyncHandler(async (req, res) => {
     
     // Filtering
     if (queries?.title) {
-        formatedQueries.title = { $regex: queries.title, $options: 'i' }
+        formatedQueries.title = { $regex: queries.title, $options: "i" }
     }
 
     // Sorting
     let sortBy = {};
     if (req.query.sort) {
-        sortBy = req.query.sort.split(',').join(' ');
+        sortBy = req.query.sort.split(",").join(" ");
     }
 
     // Fields limiting
     let fields = {};
     if (req.query.fields) {
-        fields = req.query.fields.split(',').join(' ');
+        fields = req.query.fields.split(",").join(" ");
     }
 
     // pagination
@@ -65,7 +65,7 @@ const getProducts = asyncHandler(async (req, res) => {
         return res.status(200).json({
             success: response ? true : false,
             count,
-            products: response ? response : 'Cannot get products',
+            products: response ? response : "Cannot get products",
         });
     })
     .catch((error) => {
@@ -82,7 +82,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true });
     return res.status(200).json({
         success: updatedProduct ? true : false,
-        updatedProduct: updatedProduct ? updatedProduct : 'Cannot update product'
+        updatedProduct: updatedProduct ? updatedProduct : "Cannot update product"
     });
 });
 
@@ -94,7 +94,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     const deletedProduct = await Product.findByIdAndDelete(pid);
     return res.status(200).json({
         success: deletedProduct ? true : false,
-        deletedProduct: deletedProduct ? deletedProduct : 'Cannot delete product'
+        deletedProduct: deletedProduct ? deletedProduct : "Cannot delete product"
     });
 });
 
@@ -103,7 +103,7 @@ const ratings = asyncHandler(async (req, res) => {
     console.log(_id);
     const { star, comment, pid } = req.body;
     if (!star || !pid) {
-        throw new Error('Missing inputs');
+        throw new Error("Missing inputs");
     }
     const ratingProduct = await Product.findById(pid);
     const alreadyRating = ratingProduct?.ratings?.find(element => element.postedBy.toString() === _id);
@@ -136,13 +136,13 @@ const ratings = asyncHandler(async (req, res) => {
 const uploadProductImages = asyncHandler(async (req, res) => {
     const { pid } = req.params;
     if (!req.files) {
-        throw new Error('Missing Inputs')
+        throw new Error("Missing Inputs")
     }
     const response = await Product.findByIdAndUpdate(pid, { $push: { images: { $each: req.files.map(element => element.path) } } }, { new: true });
 
     return res.status(200).json({
         success: response ? true : false,
-        updatedProduct: response ? response : 'Cannot upload product images'
+        updatedProduct: response ? response : "Cannot upload product images"
     });
 });
 

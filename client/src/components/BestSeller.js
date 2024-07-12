@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { apiGetProducts } from "../apis/product";
 import { Product } from "./";
 import Slider from "react-slick";
-import smallBanner1 from '../assets/small-banner-1.png';
-import smallBanner2 from '../assets/small-banner-2.png';
+import smallBanner1 from "../assets/small-banner-1.png";
+import smallBanner2 from "../assets/small-banner-2.png";
 
 const tabs = [
-    { id: 1, name: 'best seller' },
-    { id: 2, name: 'new arrivals' },
+    { id: 1, name: "best seller" },
+    { id: 2, name: "new arrivals" },
 ]
 const settings = {
     dots: false,
@@ -23,19 +23,18 @@ const BestSeller = () => {
     const [activedTab, setActivedTab] = useState(1);
     const [products, setProducts] = useState(null);
 
-    const fetchProducts = async () => {
-        const response = await Promise.all([apiGetProducts({ sort: '-sold' }), apiGetProducts({ sort: '-createdAt' })])
-        if (response[0]?.success) {
-            setBestSellers(response[0].products);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const response = await Promise.all([apiGetProducts({ sort: "-sold" }), apiGetProducts({ sort: "-createdAt" })])
+            if (response[0]?.success) {
+                setBestSellers(response[0].products);
+                setProducts(response[0].products);
+            }
+            if (response[1]?.success) {
+                setNewProducts(response[1].products);
+            }
             setProducts(response[0].products);
         }
-        if (response[1]?.success) {
-            setNewProducts(response[1].products);
-        }
-        setProducts(response[0].products);
-    }
-
-    useEffect(() => {
         fetchProducts()
     }, []);
 
@@ -46,7 +45,7 @@ const BestSeller = () => {
         if (activedTab === 2) {
             setProducts(newProducts)
         }
-    }, [activedTab]);
+    }, [activedTab, bestSellers, newProducts]);
 
     return (
         <div>

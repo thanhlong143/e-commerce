@@ -1,8 +1,8 @@
 import React from "react";
-import logo from '../assets/logo.png';
+import logo from "../assets/logo.png";
 import icons from "../utils/icons";
-import { Link } from 'react-router-dom';
-import path from '../utils/path';
+import { Link } from "react-router-dom";
+import path from "../utils/path";
 
 const { RiPhoneFill, MdEmail, BsHandbagFill, FaUserCircle } = icons;
 const Header = () => {

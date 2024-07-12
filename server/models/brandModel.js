@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 var brandSchema = new mongoose.Schema({
     title: {
@@ -9,4 +9,4 @@ var brandSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Brand', brandSchema);
+module.exports = mongoose.model("Brand", brandSchema);

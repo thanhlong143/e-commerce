@@ -1,7 +1,7 @@
 import icons from "./icons";
 const { IoIosStar, /*IoIosStarHalf,*/ IoIosStarOutline } = icons;
 
-export const createSlug = string => string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(' ').join('-');
+export const createSlug = string => string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(" ").join("-");
 export const formatMoney = number => Number(number?.toFixed()).toLocaleString();
 
 export const renderStarFromNumber = (number, size) => {

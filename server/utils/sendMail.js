@@ -13,7 +13,7 @@ const sendMail = asyncHandler(async ({ email, html }) => {
     });
 
     const info = await transporter.sendMail({
-        from: '"ecommerce" <no-reply@ethereal.email>', // sender address
+        from: "'ecommerce' <no-reply@ethereal.email>", // sender address
         to: email,
         subject: "Forgot password", // Subject line
         html: html

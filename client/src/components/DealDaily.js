@@ -1,10 +1,9 @@
-import React, { useState, useEffect, memo } from 'react';
-import icons from '../utils/icons';
-import { apiGetProducts } from '../apis/product';
-import defaultThumb from '../assets/default-product-image.png';
-import { formatMoney, renderStarFromNumber } from '../utils/helpers';
-import { Countdown } from './';
-import { min } from 'moment/moment';
+import React, { useState, useEffect, memo } from "react";
+import icons from "../utils/icons";
+import { apiGetProducts } from "../apis/product";
+import defaultThumb from "../assets/default-product-image.png";
+import { formatMoney, renderStarFromNumber } from "../utils/helpers";
+import { Countdown } from "./";
 
 const { IoIosStar, AiOutlineMenu } = icons;
 let idInterval;
@@ -62,29 +61,29 @@ const DealDaily = () => {
     }, [hour, minute, second, expireTime])
 
     return (
-        <div className='border w-full flex-auto'>
-            <div className='flex items-center justify-between p-4 w-full'>
-                <span className='flex-1 flex justify-center'><IoIosStar size={20} color='#DD1111' /></span>
-                <span className='flex-8 font-semibold text-[20px] flex justify-center text-gray-700'>DEAL DAILY</span>
-                <span className='flex-1'></span>
+        <div className="border w-full flex-auto">
+            <div className="flex items-center justify-between p-4 w-full">
+                <span className="flex-1 flex justify-center"><IoIosStar size={20} color="#DD1111" /></span>
+                <span className="flex-8 font-semibold text-[20px] flex justify-center text-gray-700">DEAL DAILY</span>
+                <span className="flex-1"></span>
             </div>
-            <div className='w-full flex flex-col items-center pt-8 px-4 gap-2'>
+            <div className="w-full flex flex-col items-center pt-8 px-4 gap-2">
                 <img
                     src={dealDaily?.thumb || defaultThumb}
-                    alt=''
-                    className='w-full object-contain'
+                    alt=""
+                    className="w-full object-contain"
                 />
-                <span className='line-clamp-1 text-center'>{dealDaily?.title}</span>
-                <span className='flex h-4'>{renderStarFromNumber(dealDaily?.averageRating, 20)}</span>
+                <span className="line-clamp-1 text-center">{dealDaily?.title}</span>
+                <span className="flex h-4">{renderStarFromNumber(dealDaily?.averageRating, 20)}</span>
                 <span>{`${formatMoney(dealDaily ? dealDaily?.price : 0)} VND`}</span>
             </div>
-            <div className='px-4 mt-8'>
-                <div className='flex justify-center gap-2 items-center mb-4'>
-                    <Countdown unit={'Hours'} number={hour} />
-                    <Countdown unit={'Minutes'} number={minute} />
-                    <Countdown unit={'Seconds'} number={second} />
+            <div className="px-4 mt-8">
+                <div className="flex justify-center gap-2 items-center mb-4">
+                    <Countdown unit={"Hours"} number={hour} />
+                    <Countdown unit={"Minutes"} number={minute} />
+                    <Countdown unit={"Seconds"} number={second} />
                 </div>
-                <button type='button' className='flex gap-2 items-center justify-center w-full bg-main hover:bg-gray-800 text-white font-medium py-2'>
+                <button type="button" className="flex gap-2 items-center justify-center w-full bg-main hover:bg-gray-800 text-white font-medium py-2">
                     <AiOutlineMenu />
                     <span>Options</span>
                 </button>

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose'); // Erase if already required
+const mongoose = require("mongoose"); // Erase if already required
 
 // Declare the Schema of the Mongo model
 var blogCategorySchema = new mongoose.Schema({
@@ -13,4 +13,4 @@ var blogCategorySchema = new mongoose.Schema({
 });
 
 //Export the model
-module.exports = mongoose.model('BlogCategory', blogCategorySchema);
+module.exports = mongoose.model("BlogCategory", blogCategorySchema);
