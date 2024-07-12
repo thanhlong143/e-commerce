@@ -2,9 +2,10 @@ import React, { useState, useEffect, memo } from "react";
 import icons from "../utils/icons";
 import { apiGetProducts } from "../apis/product";
 import defaultThumb from "../assets/default-product-image.png";
-import { formatMoney, renderStarFromNumber } from "../utils/helpers";
+import { formatMoney, renderStarFromNumber, secondsToHms } from "../utils/helpers";
 import { Countdown } from "./";
 
+const moment = require("moment");
 const { IoIosStar, AiOutlineMenu } = icons;
 let idInterval;
 
@@ -20,7 +21,14 @@ const DealDaily = () => {
         console.log(response);
         if (response.success) {
             setDealDaily(response.products[0]);
-            setHour(23);
+            const today = `${moment().format("MM/DD/YYYY")} 5:00:00`;
+            const seconds = new Date(today).getTime() - new Date().getTime() + 24 * 60 * 60 * 1000;
+            const number = secondsToHms(seconds);
+            setHour(number.h);
+            setMinute(number.m);
+            setSecond(number.s);
+        } else {
+            setHour(0);
             setMinute(59);
             setSecond(59);
         }
