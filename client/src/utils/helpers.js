@@ -5,23 +5,23 @@ export const createSlug = string => string.toLowerCase().normalize("NFD").replac
 export const formatMoney = number => Number(number?.toFixed()).toLocaleString();
 
 export const renderStarFromNumber = (number, size) => {
-    if (!Number(number)) {
-        return;
-    }
+   if (!Number(number)) {
+      return;
+   }
 
-    const stars = [];
+   const stars = [];
 
-    for (let i = 0; i < +number; i++) stars.push(<IoIosStar color="orange" size={size} />);
-    // for (let i = 0.5; i < +number + 0.5; i++) stars.push(<IoIosStarHalf color="orange" size={size} />);
-    for (let i = 5; i > +number; i--) stars.push(<IoIosStarOutline color="orange" size={size} />);
+   for (let i = 0; i < +number; i++) stars.push(<IoIosStar color="orange" size={size} />);
+   // for (let i = 0.5; i < +number + 0.5; i++) stars.push(<IoIosStarHalf color="orange" size={size} />);
+   for (let i = 5; i > +number; i--) stars.push(<IoIosStarOutline color="orange" size={size} />);
 
-    return stars
+   return stars
 }
 
 export function secondsToHms(d) {
-    d = Number(d) / 1000;
-    const h = Math.floor(d / 3600);
-    const m = Math.floor(d %3600 / 60);
-    const s = Math.floor(d % 3600 % 60);
-    return ({ h, m, s });
+   d = Number(d) / 1000;
+   const h = Math.floor(d / 3600);
+   const m = Math.floor(d % 3600 / 60);
+   const s = Math.floor(d % 3600 % 60);
+   return ({ h, m, s });
 }

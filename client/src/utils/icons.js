@@ -6,17 +6,17 @@ import { AiFillHome, AiFillEye, AiOutlineMenu } from "react-icons/ai";
 import { IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
 
 const icons = {
-    RiPhoneFill,
-    MdEmail,
-    BsHandbagFill,
-    FaUserCircle,
-    AiFillHome,
-    IoIosStar,
-    IoIosStarHalf,
-    IoIosStarOutline,
-    AiFillEye,
-    AiOutlineMenu,
-    BsFillSuitHeartFill
+   RiPhoneFill,
+   MdEmail,
+   BsHandbagFill,
+   FaUserCircle,
+   AiFillHome,
+   IoIosStar,
+   IoIosStarHalf,
+   IoIosStarOutline,
+   AiFillEye,
+   AiOutlineMenu,
+   BsFillSuitHeartFill
 }
 
 export default icons;
