@@ -34,7 +34,8 @@ const insertProduct = asyncHandler(async (req, res) => {
 const fn2 = async (category) => {
    await ProductCategory.create({
       title: category?.category,
-      brand: category?.brand
+      brand: category?.brand,
+      image: category?.image,
    });
 }
 

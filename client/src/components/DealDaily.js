@@ -18,7 +18,7 @@ const DealDaily = () => {
 
    const fetchDealDaily = async () => {
       const response = await apiGetProducts({ limit: 1, page: Math.round(Math.random() * 20), averageRating: 3 })
-      console.log(response);
+      
       if (response.success) {
          setDealDaily(response.products[0]);
          const today = `${moment().format("MM/DD/YYYY")} 5:00:00`;
@@ -82,7 +82,9 @@ const DealDaily = () => {
                className="w-full object-contain"
             />
             <span className="line-clamp-1 text-center">{dealDaily?.title}</span>
-            <span className="flex h-4">{renderStarFromNumber(dealDaily?.averageRating, 20)}</span>
+            <span className="flex h-4">{renderStarFromNumber(dealDaily?.averageRating, 20)?.map((el, index) => (
+               <span key={index}>{el}</span>
+            ))}</span>
             <span>{`${formatMoney(dealDaily ? dealDaily?.price : 0)} VND`}</span>
          </div>
          <div className="px-4 mt-8">
