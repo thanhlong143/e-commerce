@@ -6,17 +6,20 @@ const { sendMail } = require("../utils/sendMail");
 const crypto = require("crypto");
 
 const register = asyncHandler(async (req, res) => {
-   const { email, password, firstname, lastname } = req.body;
-   if (!email || !password || !firstname) {
+   const { email, mobile, password, firstname, lastname } = req.body;
+   if (!email || !mobile || !password || !firstname) {
       return res.status(400).json({
          success: false,
          message: "Missing inputs"
       })
    }
 
-   const user = await User.findOne({ email });
-   if (user) {
-      throw new Error("This user email address already exists");
+   const userEmail = await User.findOne({ email });
+   const userMobile = await User.findOne({ mobile });
+   if (userEmail) {
+      throw new Error("This email address already exists");
+   } else if (userMobile) {
+      throw new Error("This phone number address already exists");
    } else {
       const newUser = await User.create(req.body);
       return res.status(200).json({
@@ -49,7 +52,7 @@ const login = asyncHandler(async (req, res) => {
          userData
       });
    } else {
-      throw new Error("Invalid credentials!");
+      throw new Error("Wrong email or password!");
    }
 });
 
