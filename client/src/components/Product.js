@@ -5,6 +5,8 @@ import trendingLabel from "../assets/trending-label.png";
 import defaultThumb from "../assets/default-product-image.png";
 import { SelectOption } from "./";
 import icons from "../utils/icons";
+import { Link } from "react-router-dom";
+import path from "../utils/path";
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons;
 
@@ -12,8 +14,9 @@ const Product = ({ productData, isNew }) => {
    const [isShowOption, setIsShowOption] = useState(false);
    return (
       <div className="w-full text-base px-[10px]">
-         <div
+         <Link
             className="w-full border p-[15px] flex flex-col items-center"
+            to={`/${path.PRODUCT_DETAILS}/${productData?._id}/${productData?.title}`}
             onMouseEnter={e => {
                e.stopPropagation()
                setIsShowOption(true)
@@ -51,7 +54,7 @@ const Product = ({ productData, isNew }) => {
                <span className="line-clamp-2">{productData?.title}</span>
                <span>{`${formatMoney(productData?.price)} VND`}</span>
             </div>
-         </div>
+         </Link>
       </div>
    )
 }
