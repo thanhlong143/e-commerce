@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { Button, InputField } from "../../components";
-import { apiLogin, apiRegister } from "../../apis/user";
+import { apiForgotPassword, apiLogin, apiRegister } from "../../apis/user";
 import Swal from "sweetalert2";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import path from "../../utils/path";
 import { useDispatch } from "react-redux";
 import { register } from "../../store/user/userSlice";
@@ -10,8 +10,6 @@ import { register } from "../../store/user/userSlice";
 const Login = () => {
    const navigate = useNavigate();
    const dispatch = useDispatch();
-   const location = useLocation();
-   console.log("location", location);
 
    const [payload, setPayload] = useState({
       email: "",
@@ -21,6 +19,7 @@ const Login = () => {
       mobile: "",
    });
    const [isRegister, setIsRegister] = useState(false);
+   const [isForgotPassword, setIsForgotPassword] = useState(false);
    const resetPayload = () => {
       setPayload({
          email: "",
@@ -29,6 +28,11 @@ const Login = () => {
          lastname: "",
          mobile: "",
       })
+   }
+   const [email, setEmail] = useState("")
+   const handleForgotPassword = async () => {
+      const response = await apiForgotPassword({ email });
+      console.log(response);
    }
    const handleSubmit = useCallback(async () => {
       const { firstname, lastname, mobile, ...data } = payload;
@@ -54,6 +58,20 @@ const Login = () => {
    }, [payload, isRegister, navigate, dispatch]);
    return (
       <div className="w-screen h-screen relative">
+         <div className="absolute top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50">
+            <div className="flex flex-col gap-4">
+               <label htmlFor="email">Enter your email: </label>
+               <input type="text" id="email"
+                  className="w-[800px] pb-2 border-b outline-none placeholder:text-sm"
+                  placeholder="youremail@gmail.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+               />
+               <div className="flex items-center justify-end w-full">
+                  <Button name="Submit" handleOnClick={handleForgotPassword} />
+               </div>
+            </div>
+         </div>
          {/* <img src="" alt="" className="w-full h-full object-cover bg-main" /> */}
          <div src="" alt="" className="w-full h-full object-cover bg-main" />
          <div className="absolute top-0 bottom-0 left-0 right-1/2 items-center justify-center flex">

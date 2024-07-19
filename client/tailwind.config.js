@@ -13,7 +13,8 @@ module.exports = {
                 main: '1220px'
             },
             backgroundColor: {
-                main: '#ee3131'
+                main: '#ee3131',
+                overlay: "rgba(0, 0, 0, 0.6)"
             },
             colors: {
                 main: '#ee3131'
@@ -32,7 +33,7 @@ module.exports = {
                     '0%': {
                         '-webkit-transform': 'translateY(40px);',
                         transform: 'translateY(20px);'
-                    },  
+                    },
                     '100%': {
                         '-webkit-transform': 'translateY(0px);',
                         transform: 'translateY(0px);'

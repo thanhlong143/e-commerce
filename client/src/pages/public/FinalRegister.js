@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import path from '../../utils/path';
 import Swal from 'sweetalert2';
 
@@ -18,7 +18,7 @@ const FinalRegister = () => {
             navigate(`/${path.LOGIN}`);
          })
       }
-   }, [status]);
+   }, [status, navigate]);
    return (
       <div className='h-screen w-screen bg-gray-100'>
 
