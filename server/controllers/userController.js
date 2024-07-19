@@ -4,16 +4,40 @@ const { generateAccessToken, generateRefreshToken } = require("../middlewares/jw
 const jwt = require("jsonwebtoken");
 const { sendMail } = require("../utils/sendMail");
 const crypto = require("crypto");
+const makeToken = require("uniqid");
+
+// const register = asyncHandler(async (req, res) => {
+//    const { email, mobile, password, firstname, lastname } = req.body;
+//    if (!email || !mobile || !password || !firstname) {
+//       return res.status(400).json({
+//          success: false,
+//          message: "Missing inputs"
+//       })
+//    }
+
+//    const userEmail = await User.findOne({ email });
+//    const userMobile = await User.findOne({ mobile });
+//    if (userEmail) {
+//       throw new Error("This email address already exists");
+//    } else if (userMobile) {
+//       throw new Error("This phone number address already exists");
+//    } else {
+//       const newUser = await User.create(req.body);
+//       return res.status(200).json({
+//          success: newUser ? true : false,
+//          message: newUser ? "Register is successfully, please login" : "Something went wrong"
+//       })
+//    }
+// });
 
 const register = asyncHandler(async (req, res) => {
-   const { email, mobile, password, firstname, lastname } = req.body;
-   if (!email || !mobile || !password || !firstname) {
+   const { email, password, firstname, lastname, mobile } = req.body;
+   if (!email || !password || !firstname || !lastname || !mobile) {
       return res.status(400).json({
          success: false,
          message: "Missing inputs"
-      })
+      });
    }
-
    const userEmail = await User.findOne({ email });
    const userMobile = await User.findOne({ mobile });
    if (userEmail) {
@@ -21,11 +45,34 @@ const register = asyncHandler(async (req, res) => {
    } else if (userMobile) {
       throw new Error("This phone number address already exists");
    } else {
-      const newUser = await User.create(req.body);
+      const token = makeToken();
+      res.cookie("dataregister", { ...req.body, token }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
+      const html = `Xin vui lòng click vào đường link dưới đây để hoàn tất quá trình đăng ký. Link này sẽ hết hạn sau 15 phút. <a href="${process.env.URL_SERVER}/api/user/finalregister/${token}" >Click here</a>`;
+      await sendMail({ email, html, subject: "Hoàn tất đăng ký tài khoản!" });
       return res.status(200).json({
-         success: newUser ? true : false,
-         message: newUser ? "Register is successfully, please login" : "Something went wrong"
-      })
+         success: true,
+         message: "Please check your email to active account"
+      });
+   }
+});
+
+const finalRegister = asyncHandler(async (req, res) => {
+   const cookie = req.cookies;
+   const { token } = req.params;
+   if (!cookie || cookie?.dataregister?.token !== token) {
+      return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+   }
+   const newUser = await User.create({
+      email: cookie?.dataregister?.email,
+      password: cookie?.dataregister?.password,
+      mobile: cookie?.dataregister?.mobile,
+      firstname: cookie?.dataregister?.firstname,
+      lastname: cookie?.dataregister?.lastname,
+   });
+   if (newUser) {
+      return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
+   } else {
+      return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
    }
 });
 
@@ -115,7 +162,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
    const html = `Xin vui lòng click vào đường link dưới đây để thay đổi mật khẩu. Link này sẽ hết hạn sau 15 phút. <a href="${process.env.URL_SERVER}/api/user/reset-password/${resetToken}" >Click here</a>`;
    const data = {
       email,
-      html
+      html,
+      subject: "Forgot Password"
    }
    const result = await sendMail(data);
    return res.status(200).json({
@@ -247,5 +295,6 @@ module.exports = {
    updateUserByAdmin,
    updateUserAddress,
    updateUserCart,
+   finalRegister,
 
 }

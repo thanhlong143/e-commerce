@@ -8,7 +8,8 @@ const path = {
    OUR_SERVICES: "services",
    FAQ: "faq",
    PRODUCT_DETAILS__PID__TITLE: "san-pham/:pid/:title",
-   PRODUCT_DETAILS: 'san-pham'
+   PRODUCT_DETAILS: 'san-pham',
+   FINAL_REGISTER: "finalregister/:status",
 }
 
 export default path;
