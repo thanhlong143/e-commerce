@@ -154,15 +154,12 @@ const forgotPassword = asyncHandler(async (req, res) => {
    if (!email) {
       throw new Error("Missing email!");
    }
-
    const user = await User.findOne({ email });
    if (!user) {
       throw new Error("User not found!");
    }
-
    const resetToken = user.createPasswordChangedToken();
    await user.save();
-
    const html = `Xin vui lòng click vào đường link dưới đây để thay đổi mật khẩu. Link này sẽ hết hạn sau 15 phút. <a href="${process.env.CLIENT_URL}/reset-password/${resetToken}" >Click here</a>`;
    const data = {
       email,
@@ -171,8 +168,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
    }
    const result = await sendMail(data);
    return res.status(200).json({
-      success: true,
-      result
+      success: result.response?.includes("OK") ? true : false,
+      message: result.response?.includes("OK") ? "Hãy kiểm tra email của bạn!" : "Đã có lỗi, hãy thử lại sau!"
    })
 });
 

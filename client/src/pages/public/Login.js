@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import path from "../../utils/path";
 import { useDispatch } from "react-redux";
 import { register } from "../../store/user/userSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
    const navigate = useNavigate();
@@ -32,7 +33,11 @@ const Login = () => {
    const [email, setEmail] = useState("")
    const handleForgotPassword = async () => {
       const response = await apiForgotPassword({ email });
-      console.log(response);
+      if (response.success) {
+         toast.success(response.message, { theme: "colored" });
+      } else {
+         toast.info(response.message, { theme: "colored" });
+      }
    }
    const handleSubmit = useCallback(async () => {
       const { firstname, lastname, mobile, ...data } = payload;
@@ -58,7 +63,7 @@ const Login = () => {
    }, [payload, isRegister, navigate, dispatch]);
    return (
       <div className="w-screen h-screen relative">
-         <div className="absolute top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50">
+         {isForgotPassword && <div className="absolute animate-slide-left top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50">
             <div className="flex flex-col gap-4">
                <label htmlFor="email">Enter your email: </label>
                <input type="text" id="email"
@@ -67,11 +72,12 @@ const Login = () => {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                />
-               <div className="flex items-center justify-end w-full">
+               <div className="flex items-center justify-end w-full gap-4">
                   <Button name="Submit" handleOnClick={handleForgotPassword} />
+                  <Button name="Back" handleOnClick={() => setIsForgotPassword(false)} />
                </div>
             </div>
-         </div>
+         </div>}
          {/* <img src="" alt="" className="w-full h-full object-cover bg-main" /> */}
          <div src="" alt="" className="w-full h-full object-cover bg-main" />
          <div className="absolute top-0 bottom-0 left-0 right-1/2 items-center justify-center flex">
@@ -111,7 +117,7 @@ const Login = () => {
                   fw
                />
                <div className="flex items-center justify-between my-2 w-full text-sm">
-                  {!isRegister && <span className="text-blue-500 hover:underline cursor-pointer">Forgot your account?</span>}
+                  {!isRegister && <span onClick={() => setIsForgotPassword(true)} className="text-blue-500 hover:underline cursor-pointer">Forgot your password?</span>}
                   {!isRegister && <span
                      className="text-blue-500 hover:underline cursor-pointer"
                      onClick={() => { setIsRegister(true) }}
