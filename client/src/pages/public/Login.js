@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, InputField } from "../../components";
-import { apiForgotPassword, apiLogin, apiRegister } from "../../apis/user";
+import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "../../apis/user";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import path from "../../utils/path";
@@ -20,6 +20,8 @@ const Login = () => {
       lastname: "",
       mobile: "",
    });
+   const [isVerifiedEmail, setIsVerifiedEmail] = useState(false);
+   const [token, setToken] = useState("");
    const [invalidFields, setInvalidFields] = useState("");
    const [isRegister, setIsRegister] = useState(false);
    const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -51,10 +53,7 @@ const Login = () => {
          if (isRegister) {
             const response = await apiRegister(payload);
             if (response.success) {
-               Swal.fire("Congratulations", response.message, "success").then(() => {
-                  setIsRegister(false);
-                  resetPayload();
-               });
+               setIsVerifiedEmail(true);
             } else {
                Swal.fire("Oops", response.message, "error");
             }
@@ -69,8 +68,36 @@ const Login = () => {
          }
       }
    }, [payload, isRegister, navigate, dispatch]);
+
+   const finalRegister = async () => {
+      const response = await apiFinalRegister(token);
+      if (response.success) {
+         Swal.fire("Congratulations", response.message, "success").then(() => {
+            setIsRegister(false);
+            resetPayload();
+         });
+      } else {
+         Swal.fire("Oops", response.message, "error");
+      }
+      setIsVerifiedEmail(false);
+      setToken("");
+   }
+
    return (
-      <div className="w-screen h-screen relative">
+      <div className="w-screen h-screen relative flex justify-center">
+         {isVerifiedEmail && <div className="absolute top-0 left-0 right-0 bottom-0 bg-overlay z-50 flex flex-col  items-center justify-center">
+            <div className="bg-white w-[500px] rounded-md p-8">
+               <h4>Mã xác thực đã được gửi vào email của bạn. Hãy kiểm tra email và nhập mã xác thực:</h4>
+               <input type="text" value={token} onChange={e => setToken(e.target.value)} className="p-2 border rounded-md outline-none" />
+               <button
+                  onClick={finalRegister}
+                  type="button"
+                  className="px-4 py-2 bg-main font-semibold text-white rounded-md ml-4"
+               >
+                  Submit
+               </button>
+            </div>
+         </div>}
          {isForgotPassword && <div className="absolute animate-slide-left top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50">
             <div className="flex flex-col gap-4">
                <label htmlFor="email">Enter your email: </label>
@@ -88,7 +115,7 @@ const Login = () => {
          </div>}
          {/* <img src="" alt="" className="w-full h-full object-cover bg-main" /> */}
          <div src="" alt="" className="w-full h-full object-cover bg-main" />
-         <div className="absolute top-0 bottom-0 left-0 right-1/2 items-center justify-center flex">
+         <div className="absolute top-0 bottom-0 items-center justify-center flex">
             <div className="p-8 bg-white flex flex-col rounded-md min-w-[500px]">
                <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? "Register" : "Login"}</h1>
                {isRegister && <div className="flex items-center gap-2">

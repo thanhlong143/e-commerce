@@ -5,30 +5,7 @@ const jwt = require("jsonwebtoken");
 const { sendMail } = require("../utils/sendMail");
 const crypto = require("crypto");
 const makeToken = require("uniqid");
-
-// const register = asyncHandler(async (req, res) => {
-//    const { email, mobile, password, firstname, lastname } = req.body;
-//    if (!email || !mobile || !password || !firstname) {
-//       return res.status(400).json({
-//          success: false,
-//          message: "Missing inputs"
-//       })
-//    }
-
-//    const userEmail = await User.findOne({ email });
-//    const userMobile = await User.findOne({ mobile });
-//    if (userEmail) {
-//       throw new Error("This email address already exists");
-//    } else if (userMobile) {
-//       throw new Error("This phone number address already exists");
-//    } else {
-//       const newUser = await User.create(req.body);
-//       return res.status(200).json({
-//          success: newUser ? true : false,
-//          message: newUser ? "Register is successfully, please login" : "Something went wrong"
-//       })
-//    }
-// });
+const { btoa, atob } = require("buffer");
 
 const register = asyncHandler(async (req, res) => {
    const { email, password, firstname, lastname, mobile } = req.body;
@@ -46,38 +23,40 @@ const register = asyncHandler(async (req, res) => {
       throw new Error("This phone number address already exists");
    } else {
       const token = makeToken();
-      res.cookie("dataregister", { ...req.body, token }, { httpOnly: true, maxAge: 15 * 60 * 1000 });
-      const html = `Xin vui lòng click vào đường link dưới đây để hoàn tất quá trình đăng ký. Link này sẽ hết hạn sau 15 phút. <a href="${process.env.URL_SERVER}/api/user/finalregister/${token}" >Click here</a>`;
-      await sendMail({ email, html, subject: "Hoàn tất đăng ký tài khoản!" });
-      return res.status(200).json({
-         success: true,
-         message: "Please check your email to active account"
+      const emailEdited = btoa(email) + "@" + token;
+      const newUser = await User.create({
+         email: emailEdited,
+         password: password,
+         firstname: firstname,
+         lastname: lastname,
+         mobile: mobile
+      });
+      if (newUser) {
+         const html = `<h2>Mã đăng ký:</h2><br/><blockquote>${token}</blockquote>`;
+         await sendMail({ email, html, subject: "Xác nhận đăng ký tài khoản!" });
+      }
+      setTimeout(async () => {
+         await User.deleteOne({ email: emailEdited });
+      }, [180000])
+      return res.json({
+         success: newUser ? true : false,
+         message: newUser ? "Please check your email to active account" : "Something went wrong, please try again!"
       });
    }
 });
 
 const finalRegister = asyncHandler(async (req, res) => {
-   const cookie = req.cookies;
+   // const cookie = req.cookies;
    const { token } = req.params;
-   console.log("cookie", cookie);
-   console.log("token", token);
-   if (!cookie || cookie?.dataregister?.token !== token) {
-      res.clearCookie("dataregister");
-      return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
+   const notActiveEmail = await User.findOne({ email: new RegExp(`${token}$`) })
+   if (notActiveEmail) {
+      notActiveEmail.email = atob(notActiveEmail.email.split("@")[0]);
+      notActiveEmail.save();
    }
-   const newUser = await User.create({
-      email: cookie?.dataregister?.email,
-      password: cookie?.dataregister?.password,
-      mobile: cookie?.dataregister?.mobile,
-      firstname: cookie?.dataregister?.firstname,
-      lastname: cookie?.dataregister?.lastname,
+   return res.json({
+      success: notActiveEmail ? true : false,
+      message: notActiveEmail ? "Register is successfully. Please go login!" : "Something went wrong, please try again!"
    });
-   res.clearCookie("dataregister");
-   if (newUser) {
-      return res.redirect(`${process.env.CLIENT_URL}/finalregister/success`);
-   } else {
-      return res.redirect(`${process.env.CLIENT_URL}/finalregister/failed`);
-   }
 });
 
 const login = asyncHandler(async (req, res) => {
