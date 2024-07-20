@@ -5,7 +5,15 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
-   return config;
+   let localStorageData = window.localStorage.getItem("persist:shop/user");
+   if (localStorageData && typeof localStorageData === "string") {
+      localStorageData = JSON.parse(localStorageData);
+      const accessToken = JSON.parse(localStorageData.access_token);
+      config.headers = { Authorization: `Bearer ${accessToken}` }
+      return config;
+   } else {
+      return config;
+   }
 }, function (error) {
    return Promise.reject(error);
 });
