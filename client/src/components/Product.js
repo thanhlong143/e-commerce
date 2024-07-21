@@ -6,7 +6,6 @@ import defaultThumb from "../assets/default-product-image.png";
 import { SelectOption } from "./";
 import icons from "../utils/icons";
 import { Link } from "react-router-dom";
-import path from "../utils/path";
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons;
 
@@ -16,7 +15,7 @@ const Product = ({ productData, isNew }) => {
       <div className="w-full text-base px-[10px]">
          <Link
             className="w-full border p-[15px] flex flex-col items-center"
-            to={`/${path.PRODUCT_DETAILS}/${productData?._id}/${productData?.title}`}
+            to={`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}
             onMouseEnter={e => {
                e.stopPropagation()
                setIsShowOption(true)

@@ -85,7 +85,7 @@ const Login = () => {
 
    return (
       <div className="w-screen h-screen relative flex justify-center">
-         {isVerifiedEmail && <div className="absolute top-0 left-0 right-0 bottom-0 bg-overlay z-50 flex flex-col  items-center justify-center">
+         {isVerifiedEmail && <div className="absolute top-0 left-0 right-0 bottom-0 bg-overlay z-50 flex flex-col items-center justify-center">
             <div className="bg-white w-[500px] rounded-md p-8">
                <h4>Mã xác thực đã được gửi vào email của bạn. Hãy kiểm tra email và nhập mã xác thực:</h4>
                <input type="text" value={token} onChange={e => setToken(e.target.value)} className="p-2 border rounded-md outline-none" />
@@ -113,7 +113,6 @@ const Login = () => {
                </div>
             </div>
          </div>}
-         {/* <img src="" alt="" className="w-full h-full object-cover bg-main" /> */}
          <div src="" alt="" className="w-full h-full object-cover bg-main" />
          <div className="absolute top-0 bottom-0 items-center justify-center flex">
             <div className="p-8 bg-white flex flex-col rounded-md min-w-[500px]">
@@ -162,7 +161,9 @@ const Login = () => {
                   fw
                />
                <div className="flex items-center justify-between my-2 w-full text-sm">
-                  {!isRegister && <span onClick={() => setIsForgotPassword(true)} className="text-blue-500 hover:underline cursor-pointer">Forgot your password?</span>}
+                  {!isRegister && <span onClick={() => setIsForgotPassword(true)} className="text-blue-500 hover:underline cursor-pointer">
+                     Forgot your password?
+                  </span>}
                   {!isRegister && <span
                      className="text-blue-500 hover:underline cursor-pointer"
                      onClick={() => { setIsRegister(true) }}
@@ -172,7 +173,9 @@ const Login = () => {
                      onClick={() => { setIsRegister(false) }}
                   >Go login</span>}
                </div>
-               <Link className="text-blue-500 text-sm hover:underline cursor-pointer w-full text-center" to={`/${path.HOME}`}>Go home?</Link>
+               <Link className="text-blue-500 text-sm hover:underline cursor-pointer w-full text-center" to={`/${path.HOME}`}>
+                  Go home?
+               </Link>
             </div>
          </div>
       </div>

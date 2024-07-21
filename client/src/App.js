@@ -19,7 +19,7 @@ function App() {
             <Route path={path.PUBLIC} element={<Public />} >
                <Route path={path.HOME} element={<Home />} />
                <Route path={path.PRODUCTS} element={<Products />} />
-               <Route path={path.PRODUCT_DETAILS__PID__TITLE} element={<ProductDetails />} />
+               <Route path={path.PRODUCT_DETAILS_CATEGORY_PID__TITLE} element={<ProductDetails />} />
                <Route path={path.BLOGS} element={<Blogs />} />
                <Route path={path.OUR_SERVICES} element={<Services />} />
                <Route path={path.FAQ} element={<FAQ />} />
