@@ -1,4 +1,3 @@
-const { response } = require("express");
 const Product = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
@@ -40,6 +39,9 @@ const getProducts = asyncHandler(async (req, res) => {
 	// Filtering
 	if (queries?.title) {
 		formatedQueries.title = { $regex: queries.title, $options: "i" }
+	}
+	if (queries?.category) {
+		formatedQueries.category = { $regex: queries.category, $options: "i" }
 	}
 
 	// Sorting

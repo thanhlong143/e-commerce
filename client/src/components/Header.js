@@ -32,7 +32,7 @@ const Header = () => {
             </div>
             <div className="cursor-pointer flex items-center justify-center px-6 gap-2">
                <FaUserCircle color="red" />
-               <span>Profile</span>   
+               <span>Profile</span>
             </div>
          </div>
       </div>

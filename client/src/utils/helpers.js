@@ -35,25 +35,7 @@ export const validate = (payload, setInvalidFields) => {
          setInvalidFields(prev => [...prev, { name: array[0], message: "Require this field." }]);
       }
    }
-   // for (let array of formatPayload) {
-   //    switch (array[0]) {
-   //       case "email":
-   //          const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-   //          if (!array[1].match(regex)) {
-   //             invalids++;
-   //             setInvalidFields(prev => [...prev, { name: array[0], message: "Email invalid." }]);
-   //          }
-   //          break;
-   //       case "password":
-   //          if (array[1].length < 6) {
-   //             invalids++;
-   //             setInvalidFields(prev => [...prev, { name: array[0], message: "Password minimum 6 characters." }]);
-   //          }
-   //          break;
-   //       default:
-   //          break;
-   //    }
-   // }
-
    return invalids;
 }
+
+export const formatRoundPrice = number => Math.round(number / 1000) * 1000;
