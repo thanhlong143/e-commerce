@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Breadcrumb, Product, SearchItem } from "../../components";
 import { apiGetProducts } from "../../apis";
 import Masonry from 'react-masonry-css'
@@ -14,6 +14,8 @@ const breakpointColumnsObj = {
 const Products = () => {
    const [products, setProducts] = useState(null);
    const [activeClick, setActiveClick] = useState(null);
+   const [params] = useSearchParams();
+   
    const fetchProductsByCategory = async (queries) => {
       const response = await apiGetProducts(queries);
       if (response.success) {
@@ -21,8 +23,16 @@ const Products = () => {
       }
    }
    useEffect(() => {
-      fetchProductsByCategory();
-   }, []);
+      let param = [];
+      for (let i of params.entries()) {
+         param.push(i)
+      }
+      const queries = {}
+      for (let i of params) {
+         queries[i[0]] = i[1];
+      }
+      fetchProductsByCategory(queries);
+   }, [params]);
    const changeActiveFilter = useCallback((name) => {
       if (activeClick === name) {
          setActiveClick(null);
@@ -47,6 +57,7 @@ const Products = () => {
                      name="price"
                      activeClick={activeClick}
                      changeActiveFilter={changeActiveFilter}
+                     type="input"
                   />
                   <SearchItem
                      name="color"

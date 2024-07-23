@@ -43,6 +43,9 @@ const getProducts = asyncHandler(async (req, res) => {
 	if (queries?.category) {
 		formatedQueries.category = { $regex: queries.category, $options: "i" }
 	}
+	if (queries?.color) {
+		formatedQueries.color = { $regex: queries.color, $options: "i" }
+	}
 
 	// Sorting
 	let sortBy = {};

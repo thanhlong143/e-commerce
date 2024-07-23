@@ -20,24 +20,25 @@ const ProductDetails = () => {
    const [product, setProduct] = useState(null);
    const [quantity, setQuantity] = useState(1);
    const [relatedProducts, setRelatedProducts] = useState(null);
-   const fetchProductData = async () => {
-      const response = await apiGetProduct(pid);
-      if (response.success) {
-         setProduct(response.productData);
-      }
-   }
-   const fetchProducts = async () => {
-      const response = await apiGetProducts({ category });
-      if (response.success) {
-         setRelatedProducts(response.products);
-      }
-   }
+   
    useEffect(() => {
+      const fetchProductData = async () => {
+         const response = await apiGetProduct(pid);
+         if (response.success) {
+            setProduct(response.productData);
+         }
+      }
+      const fetchProducts = async () => {
+         const response = await apiGetProducts({ category });
+         if (response.success) {
+            setRelatedProducts(response.products);
+         }
+      }
       if (pid) {
          fetchProductData();
          fetchProducts();
       }
-   }, [pid]);
+   }, [pid, category]);
 
    const handleQuantity = useCallback((number) => {
       if (!Number(number) || Number(number) < 1) {
@@ -45,7 +46,7 @@ const ProductDetails = () => {
       } else {
          setQuantity(number);
       }
-   }, [quantity]);
+   }, []);
    const handleChangeQuantity = useCallback((flag) => {
       if (flag === "minus" && quantity > 1) {
          setQuantity(prev => +prev - 1);

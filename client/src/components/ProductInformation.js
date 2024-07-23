@@ -1,8 +1,6 @@
 import React, { memo, useState } from "react";
 import { productInfoTabs } from "../utils/contants";
 
-const activedStyles = "";
-const notActivedStyles = "";
 const ProductInformation = () => {
    const [activedTab, setActivedTab] = useState(1);
    return (
