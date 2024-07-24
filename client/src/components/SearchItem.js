@@ -3,13 +3,17 @@ import icons from "../utils/icons";
 import { colors } from "../utils/contants";
 import { createSearchParams, useNavigate, useParams } from "react-router-dom";
 import { apiGetProducts } from "../apis";
+import useDebounce from "../hooks/useDebounce";
 
 const { AiOutlineDown } = icons;
 const SearchItem = ({ name, activeClick, changeActiveFilter, type = "checkbox" }) => {
    const navigate = useNavigate();
    const { category } = useParams();
    const [selected, setSelected] = useState([]);
-   const [price, setPrice] = useState([0, 0]);
+   const [price, setPrice] = useState({
+      from: "",
+      to: ""
+   });
    const [bestPrice, setBestPrice] = useState(null);
 
    const handleSelect = (e) => {
@@ -45,21 +49,29 @@ const SearchItem = ({ name, activeClick, changeActiveFilter, type = "checkbox" }
       if (type === "input") {
          fetchBestPriceProduct();
       }
-   }, [type])
+   }, [type]);
 
+   // useEffect(() => {
+   //    if (price.from > price.to) {
+   //       alert("")
+   //    }
+   // },[price])
+
+   const debouncePriceFrom = useDebounce(price.from, 500);
+   const debouncePriceto = useDebounce(price.to, 500);
    useEffect(() => {
-      console.log(price);
-      // const validPrice = price.filter(el => +el > 0);
-
-      // if (price.from > 0) {
-      //    navigate({
-      //       pathname: `/${category}`,
-      //       search: createSearchParams(price).toString()
-      //    })
-      // } else {
-      //    navigate(`/${category}`)
-      // }
-   }, [price]);
+      const data = {};
+      if (Number(debouncePriceFrom) > 0) {
+         data.from = debouncePriceFrom;
+      }
+      if (Number(debouncePriceto) > 0) {
+         data.to = debouncePriceto;
+      }
+      navigate({
+         pathname: `/${category}`,
+         search: createSearchParams(data).toString()
+      })
+   }, [debouncePriceFrom, debouncePriceto, category, navigate]);
 
    return (
       <div
@@ -98,15 +110,16 @@ const SearchItem = ({ name, activeClick, changeActiveFilter, type = "checkbox" }
                   <span className="whitespace-nowrap">{`Giá cao nhất là ${Number(bestPrice).toLocaleString()} VND`}</span>
                   <span onClick={e => {
                      e.stopPropagation();
-                     setSelected([]);
+                     setPrice({ from: "", to: "" });
+                     changeActiveFilter(null);
                   }} className="underline cursor-pointer hover:text-main">Reset</span>
                </div>
                <div className="flex items-center p-2 gap-2">
                   <div className="flex items-center gap-2">
                      <label htmlFor="from">From</label>
                      <input
-                        value={price[0]}
-                        onChange={e => setPrice(prev => prev.map((el, index) => index === 0 ? e.target.value : el))}
+                        value={price.from}
+                        onChange={e => setPrice(prev => ({...prev, from: e.target.value}))}
                         className="form-input"
                         type="number"
                         id="from" />
@@ -114,8 +127,8 @@ const SearchItem = ({ name, activeClick, changeActiveFilter, type = "checkbox" }
                   <div className="flex items-center gap-2">
                      <label htmlFor="to">To</label>
                      <input
-                        value={price[1]}
-                        onChange={e => setPrice(prev => prev.map((el, index) => index === 1 ? e.target.value : el))}
+                        value={price.to}
+                        onChange={e => setPrice(prev => ({...prev, to: e.target.value}))}
                         className="form-input"
                         type="number"
                         id="to" />
