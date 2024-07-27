@@ -18,27 +18,42 @@ const settings = {
 const ProductDetails = () => {
    const { pid, title, category } = useParams();
    const [product, setProduct] = useState(null);
+   const [currentImage, setCurrentImage] = useState(null);
    const [quantity, setQuantity] = useState(1);
    const [relatedProducts, setRelatedProducts] = useState(null);
+   const [update, setUpdate] = useState(false);
+
+   const fetchProductData = async () => {
+      const response = await apiGetProduct(pid);
+      if (response.success) {
+         setProduct(response.productData);
+         setCurrentImage(response.productData?.thumb);
+      }
+   }
+   const fetchProducts = async () => {
+      const response = await apiGetProducts({ category });
+      if (response.success) {
+         setRelatedProducts(response.products);
+      }
+   }
    
    useEffect(() => {
-      const fetchProductData = async () => {
-         const response = await apiGetProduct(pid);
-         if (response.success) {
-            setProduct(response.productData);
-         }
-      }
-      const fetchProducts = async () => {
-         const response = await apiGetProducts({ category });
-         if (response.success) {
-            setRelatedProducts(response.products);
-         }
-      }
       if (pid) {
          fetchProductData();
          fetchProducts();
       }
-   }, [pid, category]);
+      window.scrollTo(0, 0);
+   }, [pid]);
+   
+   useEffect(() => {
+      if (pid) {
+         fetchProductData();
+      }
+   }, [update]);
+
+   const rerender=useCallback(() => {
+      setUpdate(!update);
+   },[update])
 
    const handleQuantity = useCallback((number) => {
       if (!Number(number) || Number(number) < 1) {
@@ -54,6 +69,11 @@ const ProductDetails = () => {
          setQuantity(prev => +prev + 1);
       }
    }, [quantity]);
+
+   const handleClickImage = (e, el) => {
+      e.stopPropagation();
+      setCurrentImage(el);
+   }
    return (
       <div className="w-full">
          <div className="h-[81px] flex items-center justify-center bg-gray-100">
@@ -64,15 +84,15 @@ const ProductDetails = () => {
          </div>
          <div className="w-main m-auto mt-4 flex">
             <div className="w-2/5 flex flex-col gap-4">
-               <div className="h-[458px] w-[458px] border">
+               <div className="h-[458px] w-[458px] border overflow-hidden">
                   <ReactImageMagnify {...{
                      smallImage: {
                         alt: "Product",
                         isFluidWidth: true,
-                        src: product?.thumb
+                        src: currentImage
                      },
                      largeImage: {
-                        src: product?.thumb,
+                        src: currentImage,
                         width: 1200,
                         height: 1500
                      }
@@ -81,14 +101,14 @@ const ProductDetails = () => {
                <div className="w-[458px]">
                   <Slider className="image-slider flex gap-2 justify-between" {...settings}>
                      {product?.images?.map(el => (
-                        <div className="" key={el}>
-                           <img src={el} alt="sub-product" className="h-[143px] w-[143px] border object-cover" />
+                        <div className="flex-1" key={el}>
+                           <img onClick={e => handleClickImage(e, el)} src={el} alt="sub-product" className="h-[143px] cursor-pointer w-[143px] border object-cover" />
                         </div>
                      ))}
                   </Slider>
                </div>
             </div>
-            <div className="w-2/5 pr-[24px] flex-col gap-4">
+            <div className="w-2/5 pr-[24px] flex flex-col gap-4">
                <div className="flex items-center justify-between">
                   <h2 className="text-[30px] font-semibold">{`${formatMoney(formatRoundPrice(product?.price))} VND`}</h2>
                   <span className="text-sm text-main">{`Kho ${product?.quantity}`}</span>
@@ -98,7 +118,7 @@ const ProductDetails = () => {
                   <span className="text-sm text-main italic">{`(Đã bán: ${product?.sold} cái)`}</span>
                </div>
                <ul className="list-square text-sm text-gray-500 pl-4">
-                  {product?.description?.map(el => (<li className="leading-8" key={el}>{el}</li>))}
+                  {product?.description?.map(el => (<li className="leading-6" key={el}>{el}</li>))}
                </ul>
                <div className="flex flex-col gap-8">
                   <div className="flex items-center gap-4">
@@ -126,7 +146,13 @@ const ProductDetails = () => {
             </div>
          </div>
          <div className="w-main m-auto mt-8">
-            <ProductInformation />
+            <ProductInformation
+               totalRatings={product?.averageRating}
+               ratings={product?.ratings}
+               productName={product?.title}
+               pid={product?._id}
+               rerender={rerender}
+            />
          </div>
          <div className="w-main m-auto mt-8">
             <h3 className="text-[20px] font-semibold py-[15px] border-b-2 border-main">OTHER CUSTOMER ALSO LIKED</h3>

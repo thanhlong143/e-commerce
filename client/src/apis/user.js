@@ -14,7 +14,7 @@ export const apiFinalRegister = (token) => axios({
 export const apiLogin = (data) => axios({
    url: "/user/login",
    method: "post",
-   data: data,
+   data,
 });
 
 export const apiForgotPassword = (data) => axios({
