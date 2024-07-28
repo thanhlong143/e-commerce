@@ -11,9 +11,9 @@ instance.interceptors.request.use(function (config) {
       const accessToken = JSON.parse(localStorageData.access_token);
       config.headers = { Authorization: `Bearer ${accessToken}` }
       return config;
-   } else {
-      return config;
    }
+   return config;
+   
 }, function (error) {
    return Promise.reject(error);
 });

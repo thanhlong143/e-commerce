@@ -6,7 +6,7 @@ export const userSlice = createSlice({
    initialState: {
       isLoggedIn: false,
       current: null,
-      token: null,
+      access_token: null,
       isPending: false
    },
    reducers: {
