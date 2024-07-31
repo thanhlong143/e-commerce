@@ -22,9 +22,11 @@ const Products = () => {
    const fetchProductsByCategory = async (queries) => {
       const response = await apiGetProducts(queries);
       if (response.success) {
-         setProducts(response.products)
+         setProducts(response);
       }
    }
+
+   const { category } = useParams();
    useEffect(() => {
       let param = [];
       for (let i of params.entries()) {
@@ -43,18 +45,22 @@ const Products = () => {
             ]
          }
          delete queries.price;
+      } else {
+         if (queries.from) {
+            queries.price = { gte: queries.from }
+         }
+         if (queries.to) {
+            queries.price = { lte: queries.to }
+         }
       }
-      if (queries.from) {
-         queries.price = { gte: queries.from }
-      }
-      if (queries.to) {
-         queries.price = { lte: queries.to }
-      }
-      delete queries.from;
+      
       delete queries.to;
+      delete queries.from;
       const q = { ...priceQuery, ...queries };
       fetchProductsByCategory(q);
+      window.scrollTo(0, 0);
    }, [params]);
+
    const changeActiveFilter = useCallback((name) => {
       if (activeClick === name) {
          setActiveClick(null);
@@ -62,18 +68,19 @@ const Products = () => {
          setActiveClick(name);
       }
    }, [activeClick]);
-   const { category } = useParams();
+   
    const changeValue = useCallback((value) => {
       setSort(value);
    }, []);
 
    useEffect(() => {
-      navigate({
-         pathname: `/${category}`,
-         search: createSearchParams({ sort }).toString()
-      })
+      if (sort) {
+         navigate({
+            pathname: `/${category}`,
+            search: createSearchParams({ sort }).toString()
+         })
+      }
    }, [sort]);
-
    return (
       <div className="w-full">
          <div className="h-[81px] flex items-center justify-center bg-gray-100">
@@ -111,7 +118,7 @@ const Products = () => {
                breakpointCols={breakpointColumnsObj}
                className="flex mx-[-10px]"
                columnClassName="my-masonry-grid_column">
-               {products?.map(el => (
+               {products?.products?.map(el => (
                   <Product
                      key={el._id}
                      pid={el.id}
@@ -122,7 +129,9 @@ const Products = () => {
             </Masonry>
          </div>
          <div className="w-main m-auto my-4 flex justify-end">
-            <Pagination />
+            <Pagination
+               totalCount={products?.count}
+            />
          </div>
          <div className="w-full h-[500px]"></div>
       </div>
