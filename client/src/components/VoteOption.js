@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import logo from "../assets/logo.png";
-import { voteOptions } from "../utils/contants";
+import logo from "assets/logo.png";
+import { voteOptions } from "utils/contants";
 import { AiFillStar } from "react-icons/ai";
 import { Button } from "./";
 

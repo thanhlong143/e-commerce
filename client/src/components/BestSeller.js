@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { apiGetProducts } from "../apis/product";
+import { apiGetProducts } from "apis/product";
 import { CustomSlider } from "./";
-import * as actions from "../store/products/asyncActions";
+import * as actions from "store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
-import smallBanner1 from "../assets/small-banner-1.png";
-import smallBanner2 from "../assets/small-banner-2.png";
+import smallBanner1 from "assets/small-banner-1.png";
+import smallBanner2 from "assets/small-banner-2.png";
 
 const tabs = [
    { id: 1, name: "best seller" },

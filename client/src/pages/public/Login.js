@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, InputField } from "../../components";
-import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "../../apis/user";
+import { Button, InputField, Loading } from "components";
+import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "apis/user";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import path from "../../utils/path";
+import path from "utils/path";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/user/userSlice";
+import { login } from "store/user/userSlice";
+import { showModal } from "store/app/appSlice";
 import { toast } from "react-toastify";
-import { validate } from "../../utils/helpers";
+import { validate } from "utils/helpers";
 
 const Login = () => {
    const navigate = useNavigate();
@@ -51,7 +52,9 @@ const Login = () => {
       const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields);
       if (invalids === 0) {
          if (isRegister) {
+            dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }));
             const response = await apiRegister(payload);
+            dispatch(showModal({ isShowModal: false, modalChildren: null }));
             if (response.success) {
                setIsVerifiedEmail(true);
             } else {

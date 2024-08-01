@@ -7,7 +7,8 @@ export const userSlice = createSlice({
       isLoggedIn: false,
       current: null,
       access_token: null,
-      isPending: false
+      isPending: false,
+      message: ""
    },
    reducers: {
       login: (state, action) => {
@@ -16,7 +17,13 @@ export const userSlice = createSlice({
       },
       logout: (state, action) => {
          state.isLoggedIn = false;
+         state.current = null;
          state.access_token = null;
+         state.isPending = false;
+         state.message = ""
+      },
+      clearMessage: (state) => {
+         state.message = "";
       }
    },
    extraReducers: (builder) => {
@@ -27,15 +34,19 @@ export const userSlice = createSlice({
       builder.addCase(actions.getCurrent.fulfilled, (state, action) => {
          state.isLoading = false;
          state.current = action.payload;
+         state.isLoggedIn = true;
       });
 
       builder.addCase(actions.getCurrent.rejected, (state, action) => {
          state.isLoading = false;
          state.current = null;
+         state.isLoggedIn = false;
+         state.access_token = null;
+         state.message = "Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại!"
       });
    }
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, clearMessage } = userSlice.actions;
 
 export default userSlice.reducer;

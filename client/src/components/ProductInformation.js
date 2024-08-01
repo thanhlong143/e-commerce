@@ -1,12 +1,12 @@
 import React, { memo, useCallback, useState } from "react";
-import { productInfoTabs } from "../utils/contants";
+import { productInfoTabs } from "utils/contants";
 import { Votebar, Button, VoteOption, Comment } from "./";
-import { renderStarFromNumber } from "../utils/helpers";
+import { renderStarFromNumber } from "utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "../store/app/appSlice";
-import { apiRatings } from "../apis";
+import { showModal } from "store/app/appSlice";
+import { apiRatings } from "apis";
 import Swal from "sweetalert2";
-import path from "../utils/path";
+import path from "utils/path";
 import { useNavigate } from "react-router-dom";
 
 const ProductInformation = ({ totalRatings, ratings, productName, pid, rerender }) => {

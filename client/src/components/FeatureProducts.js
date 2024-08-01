@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ProductCard } from "./";
-import { apiGetProducts } from "../apis";
-import bannerLargeBottom from "../assets/banner-large-bottom.png";
-import bannerMediumBottom from "../assets/banner-medium-bottom.png";
-import bannerSmallBottom1 from "../assets/banner-small-bottom-1.png";
-import bannerSmallBottom2 from "../assets/banner-small-bottom-2.png";
+import { apiGetProducts } from "apis";
+import bannerLargeBottom from "assets/banner-large-bottom.png";
+import bannerMediumBottom from "assets/banner-medium-bottom.png";
+import bannerSmallBottom1 from "assets/banner-small-bottom-1.png";
+import bannerSmallBottom2 from "assets/banner-small-bottom-2.png";
 
 const FeatureProducts = () => {
    const [products, setProducts] = useState(null);

@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { createSlug } from "../utils/helpers";
+import { createSlug } from "utils/helpers";
 import { useSelector } from "react-redux";
 
 const Sidebar = () => {

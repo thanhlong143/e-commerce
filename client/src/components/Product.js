@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { formatMoney, renderStarFromNumber } from "../utils/helpers";
-import newLabel from "../assets/new-label.png";
-import trendingLabel from "../assets/trending-label.png";
-import defaultThumb from "../assets/default-product-image.png";
+import { formatMoney, renderStarFromNumber } from "utils/helpers";
+import newLabel from "assets/new-label.png";
+import trendingLabel from "assets/trending-label.png";
+import defaultThumb from "assets/default-product-image.png";
 import { SelectOption } from "./";
-import icons from "../utils/icons";
+import icons from "utils/icons";
 import { Link } from "react-router-dom";
 
 const { AiFillEye, AiOutlineMenu, BsFillSuitHeartFill } = icons;
