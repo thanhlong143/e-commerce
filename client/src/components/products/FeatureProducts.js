@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ProductCard } from "./";
+import { ProductCard } from "..";
 import { apiGetProducts } from "apis";
 import bannerLargeBottom from "assets/banner-large-bottom.png";
 import bannerMediumBottom from "assets/banner-medium-bottom.png";

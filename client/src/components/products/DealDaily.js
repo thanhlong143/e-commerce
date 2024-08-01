@@ -3,7 +3,7 @@ import icons from "utils/icons";
 import { apiGetProducts } from "apis/product";
 import defaultThumb from "assets/default-product-image.png";
 import { formatMoney, renderStarFromNumber, secondsToHms } from "utils/helpers";
-import { Countdown } from "./";
+import { Countdown } from "..";
 
 const moment = require("moment");
 const { IoIosStar, AiOutlineMenu } = icons;

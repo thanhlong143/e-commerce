@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useState } from "react";
 import { productInfoTabs } from "utils/contants";
-import { Votebar, Button, VoteOption, Comment } from "./";
+import { Votebar, Button, VoteOption, Comment } from "..";
 import { renderStarFromNumber } from "utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "store/app/appSlice";
