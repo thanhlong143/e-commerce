@@ -3,6 +3,7 @@ const ctrls = require("../controllers/userController");
 const { verifyAccessToken, isAdmin } = require("../middlewares/verifyToken");
 
 router.post("/register", ctrls.register);
+router.post("/mock", ctrls.createUsers);
 router.put("/finalregister/:token", ctrls.finalRegister);
 router.post("/login", ctrls.login);
 router.get("/current", verifyAccessToken, ctrls.getCurrent);
@@ -11,7 +12,7 @@ router.get("/logout", ctrls.logout);
 router.post("/forgotpassword", ctrls.forgotPassword);
 router.put("/resetpassword", ctrls.resetPassword);
 router.get("/", [verifyAccessToken, isAdmin], ctrls.getUsers);
-router.delete("/", [verifyAccessToken, isAdmin], ctrls.deleteUsers);
+router.delete("/:uid", [verifyAccessToken, isAdmin], ctrls.deleteUsers);
 router.put("/current", [verifyAccessToken], ctrls.updateUser);
 router.put("/:uid", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
 router.put("/current/address", [verifyAccessToken], ctrls.updateUserAddress);

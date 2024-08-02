@@ -29,6 +29,8 @@ export { default as Footer } from "./footer/Footer";
 
 export { default as InputField } from "./inputs/InputField";
 export { default as InputSelect } from "./inputs/InputSelect";
+export { default as InputForm } from "./inputs/InputForm";
+export { default as Select } from "./inputs/Select";
 
 export { default as Button } from "./buttons/Button";
 

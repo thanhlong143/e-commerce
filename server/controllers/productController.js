@@ -34,42 +34,28 @@ const getProduct = asyncHandler(async (req, res) => {
 // Filtering, sorting & pagination
 const getProducts = asyncHandler(async (req, res) => {
 	const queries = { ...req.query };
-	// Tách các trường đặc biệt ra khỏi query
 	const excludeFields = ["limit", "sort", "page", "fields"];
 	excludeFields.forEach(element => delete queries[element]);
-	// Format lại các operators cho đúng cú pháp mongose
 	let queryString = JSON.stringify(queries);
 	queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, matchedElement => `$${matchedElement}`);
 	const formatedQueries = JSON.parse(queryString);
 	let colorQueryObject = {}
-	// Filtering
-	if (queries?.title) {
-		formatedQueries.title = { $regex: queries.title, $options: "i" }
-	}
-	if (queries?.category) {
-		formatedQueries.category = { $regex: queries.category, $options: "i" }
-	}
+	if (queries?.title) { formatedQueries.title = { $regex: queries.title, $options: "i" } }
+	if (queries?.category) { formatedQueries.category = { $regex: queries.category, $options: "i" } }
 	if (queries?.color) {
 		delete formatedQueries.color;
 		const colorArr = queries.color.split(",");
-		const colorQuery = colorArr.map(el => ({ color: {$regex: el, $options: "i"} }));
+		const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: "i" } }));
 		colorQueryObject = { $or: colorQuery }
 	}
 	const q = { ...colorQueryObject, ...formatedQueries };
 
-	// Sorting
 	let sortBy = {};
-	if (req.query.sort) {
-		sortBy = req.query.sort.split(",").join(" ");
-	}
+	if (req.query.sort) { sortBy = req.query.sort.split(",").join(" "); }
 
-	// Fields limiting
 	let fields = {};
-	if (req.query.fields) {
-		fields = req.query.fields.split(",").join(" ");
-	}
+	if (req.query.fields) { fields = req.query.fields.split(",").join(" "); }
 
-	// pagination
 	const page = +req.query.page || 1
 	const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
 	const skip = (page - 1) * limit;
@@ -83,9 +69,7 @@ const getProducts = asyncHandler(async (req, res) => {
 				products: response ? response : "Cannot get products",
 			});
 		})
-		.catch((error) => {
-			return error;
-		})
+		.catch((error) => { return error; })
 
 });
 
