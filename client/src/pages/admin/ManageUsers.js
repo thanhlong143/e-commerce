@@ -1,6 +1,6 @@
 import { apiDeleteUser, apiGetUsers, apiUpdateUser } from "apis";
 import React, { useCallback, useEffect, useState } from "react";
-import { roles } from "utils/contants";
+import { blockStatus, roles } from "utils/contants";
 import moment from "moment";
 import { Button, InputField, InputForm, Pagination, Select } from "components";
 import useDebounce from "hooks/useDebounce";
@@ -8,15 +8,16 @@ import { useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import clsx from "clsx";
 
 const ManageUsers = () => {
-   const { handleSubmit, register, formState: { errors } } = useForm({
+   const { handleSubmit, register, formState: { errors }, reset } = useForm({
       email: "",
       firstname: "",
       lastname: "",
       role: "",
       mobile: "",
-      status: ""
+      isBlocked: ""
    });
    const [users, setUsers] = useState(null);
    const [queries, setQueries] = useState({ q: "" });
@@ -65,8 +66,18 @@ const ManageUsers = () => {
          }
       })
    }
+
+   // useEffect(() => {
+   //    if (editElement) {
+   //       reset({
+   //          role: editElement.role,
+   //          isBlocked: editElement.isBlocked
+   //       })
+   //    }
+   // }, [editElement])
+
    return (
-      <div className="w-full pl-8">
+      <div className={clsx("w-full pl-8", editElement && "pl-16")}>
          <h1 className="h-[75px] flex justify-between items-center text-3xl font-bold px-4 border-b">
             <span>Manage users</span>
          </h1>
@@ -138,7 +149,17 @@ const ManageUsers = () => {
                               /> : <span>{el.lastname}</span>}
                            </td>
                            <td className="py-2 px-4">
-                              {editElement?._id === el._id ? <Select /> : <span>{roles.find(role => +role.code === +el.role)?.value}</span>}
+                              {editElement?._id === el._id
+                                 ? <Select
+                                    register={register}
+                                    fullWidth
+                                    errors={errors}
+                                    defaultValue={el.role}
+                                    id={"role"}
+                                    validate={{ required: "Vui lòng chọn" }}
+                                    option={roles}
+                                 />
+                                 : <span>{roles.find(role => +role.code === +el.role)?.value}</span>}
                            </td>
                            <td className="py-2 px-4">
                               {editElement?._id === el._id ? <InputForm
@@ -157,7 +178,17 @@ const ManageUsers = () => {
                               /> : <span>{el.mobile}</span>}
                            </td>
                            <td className="py-2 px-4">
-                              {editElement?._id === el._id ? <Select /> : <span>{el.isBlocked ? "Blocked" : "Active"}</span>}
+                              {editElement?._id === el._id
+                                 ? <Select
+                                    register={register}
+                                    fullWidth
+                                    errors={errors}
+                                    defaultValue={el.isBlocked}
+                                    id={"isBlocked"}
+                                    validate={{ required: "Vui lòng chọn" }}
+                                    option={blockStatus}
+                                 />
+                                 : <span>{el.isBlocked ? "Blocked" : "Active"}</span>}
                            </td>
                            <td className="py-2 px-4">
                               {moment(el.updatedAt).format("DD/MM/YYYY")}
