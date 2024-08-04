@@ -6,6 +6,7 @@ import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
 import { formatMoney, formatRoundPrice, renderStarFromNumber } from "../../utils/helpers";
 import { productExtraInformation } from "../../utils/contants";
+import DOMPurify from "dompurify";
 
 const settings = {
    dots: false,
@@ -84,16 +85,16 @@ const ProductDetails = () => {
          </div>
          <div className="w-main m-auto mt-4 flex">
             <div className="w-2/5 flex flex-col gap-4">
-               <div className="h-[458px] w-[458px] border overflow-hidden">
+               <div className="h-[458px] w-[458px] border flex items-center overflow-hidden">
                   <ReactImageMagnify {...{
                      smallImage: {
-                        alt: "Product",
+                        alt: "",
                         isFluidWidth: true,
                         src: currentImage
                      },
                      largeImage: {
                         src: currentImage,
-                        width: 1200,
+                        width: 1800,
                         height: 1500
                      }
                   }} />
@@ -118,7 +119,8 @@ const ProductDetails = () => {
                   <span className="text-sm text-main italic">{`(Đã bán: ${product?.sold} cái)`}</span>
                </div>
                <ul className="list-square text-sm text-gray-500 pl-4">
-                  {product?.description?.map(el => (<li className="leading-6" key={el}>{el}</li>))}
+                  {product?.description?.length > 1 && product?.description?.map(el => (<li className="leading-6" key={el}>{el}</li>))}
+                  {product?.description?.length === 1 && <div className="text-sm line-clamp-[10] mb-8" dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(product?.description[0])}}></div>}
                </ul>
                <div className="flex flex-col gap-8">
                   <div className="flex items-center gap-4">
