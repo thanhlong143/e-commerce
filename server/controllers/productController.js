@@ -44,6 +44,7 @@ const getProducts = asyncHandler(async (req, res) => {
 	queryString = queryString.replace(/\b(gte|gt|lt|lte)\b/g, matchedElement => `$${matchedElement}`);
 	const formatedQueries = JSON.parse(queryString);
 	let colorQueryObject = {}
+
 	if (queries?.title) { formatedQueries.title = { $regex: queries.title, $options: "i" } }
 	if (queries?.category) { formatedQueries.category = { $regex: queries.category, $options: "i" } }
 	if (queries?.color) {
@@ -52,7 +53,21 @@ const getProducts = asyncHandler(async (req, res) => {
 		const colorQuery = colorArr.map(el => ({ color: { $regex: el, $options: "i" } }));
 		colorQueryObject = { $or: colorQuery }
 	}
-	const q = { ...colorQueryObject, ...formatedQueries };
+
+	let queryObject = {}
+	if (queries?.q) {
+		delete formatedQueries.q;
+		queryObject = {
+			$or: [
+				{ color: { $regex: queries.q, $options: "i" } },
+				{ title: { $regex: queries.q, $options: "i" } },
+				{ category: { $regex: queries.q, $options: "i" } },
+				{ brand: { $regex: queries.q, $options: "i" } },
+				// { description: { $regex: queries.q, $options: "i" } },
+			]
+		}
+	}
+	const qr = { ...colorQueryObject, ...formatedQueries, ...queryObject };
 
 	let sortBy = {};
 	if (req.query.sort) { sortBy = req.query.sort.split(",").join(" "); }
@@ -64,9 +79,9 @@ const getProducts = asyncHandler(async (req, res) => {
 	const limit = +req.query.limit || process.env.LIMIT_PRODUCTS;
 	const skip = (page - 1) * limit;
 
-	await Product.find(q).skip(skip).limit(limit).select(fields).sort(sortBy)
+	await Product.find(qr).skip(skip).limit(limit).select(fields).sort(sortBy)
 		.then(async (response) => {
-			const count = await Product.find(q).countDocuments();
+			const count = await Product.find(qr).countDocuments();
 			return res.status(200).json({
 				success: response ? true : false,
 				count,
@@ -79,13 +94,14 @@ const getProducts = asyncHandler(async (req, res) => {
 
 const updateProduct = asyncHandler(async (req, res) => {
 	const { pid } = req.params;
-	if (req.body && req.body.title) {
-		req.body.slug = slugify(req.body.title);
-	}
+	const files = req?.files;
+	if (files?.thumb) { req.body.thumb = files?.thumb[0]?.path; }
+	if (files?.images) { req.body.images = files?.images?.map(el => el.path); }
+	if (req.body && req.body.title) { req.body.slug = slugify(req.body.title); }
 	const updatedProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true });
 	return res.status(200).json({
 		success: updatedProduct ? true : false,
-		updatedProduct: updatedProduct ? updatedProduct : "Cannot update product"
+		message: updatedProduct ? "Updated" : "Cannot update product"
 	});
 });
 
@@ -97,13 +113,12 @@ const deleteProduct = asyncHandler(async (req, res) => {
 	const deletedProduct = await Product.findByIdAndDelete(pid);
 	return res.status(200).json({
 		success: deletedProduct ? true : false,
-		deletedProduct: deletedProduct ? deletedProduct : "Cannot delete product"
+		message: deletedProduct ? "Deleted" : "Cannot delete product"
 	});
 });
 
 const ratings = asyncHandler(async (req, res) => {
 	const { _id } = req.user;
-	console.log(_id);
 	const { star, comment, pid, updatedAt } = req.body;
 	if (!star || !pid) {
 		throw new Error("Missing inputs");

@@ -90,7 +90,6 @@ const login = asyncHandler(async (req, res) => {
 const getCurrent = asyncHandler(async (req, res) => {
    const { _id } = req.user;
    const user = await User.findById(_id).select("-refreshToken -password");
-   console.log(user);
    return res.status(200).json({
       success: user ? true : false,
       result: user ? user : "User not found"
@@ -191,7 +190,6 @@ const getUsers = asyncHandler(async (req, res) => {
          { email: { $regex: req.query.q, $options: "i" } },
       ]
    }
-   console.log(formatedQueries);
 
    let sortBy = {};
    if (req.query.sort) { sortBy = req.query.sort.split(",").join(" "); }
