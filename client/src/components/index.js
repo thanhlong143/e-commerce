@@ -3,6 +3,7 @@ export { default as TopHeader } from "./headers/TopHeader";
 
 export { default as Sidebar } from "./sidebar/Sidebar";
 export { default as AdminSidebar } from "./sidebar/AdminSidebar";
+export { default as MemberSidebar } from "./sidebar/MemberSidebar";
 
 export { default as Banner } from "./common/Banner";
 export { default as Countdown } from "./common/Countdown";

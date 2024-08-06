@@ -46,7 +46,7 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
       setPreview(prev => ({ ...prev, images: imagesPreview }));
    }
 
-   const handleAddVariant = async (data) => { 
+   const handleAddVariant = async (data) => {
       if (data.color === customizeVariant.color) { Swal.fire("Oops!", "Color is not changed", "info") }
       else {
          const formData = new FormData();
@@ -58,12 +58,16 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
             }
          }
          dispatch(showModal({ isShowModal: true, modalChildren: <Loading /> }))
-         const response = await apiAddVariant(formData,customizeVariant._id);
+         const response = await apiAddVariant(formData, customizeVariant._id);
          dispatch(showModal({ isShowModal: false, modalChildren: null }));
-         console.log(response);
+         if (response.success) {
+            toast.success(response.message);
+            reset();
+            setPreview({ thumb: "", images: [] })
+         } else { toast.error(response.message); }
       }
    }
-   
+
    useEffect(() => {
       if (watch("thumb") instanceof FileList && watch("thumb").length > 0) {
          handlePreviewThumb(watch("thumb")[0]);

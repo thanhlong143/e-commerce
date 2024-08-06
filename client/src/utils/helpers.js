@@ -38,7 +38,7 @@ export const validate = (payload, setInvalidFields) => {
    return invalids;
 }
 
-export const formatRoundPrice = number => Math.round(number / 1000) * 1000;
+export const formatRoundPrice = number => +number;
 
 export const generateRange = (start, end) => {
    const length = end + 1 - start;

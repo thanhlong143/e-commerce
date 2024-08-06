@@ -182,7 +182,7 @@ const addVariant = asyncHandler(async (req, res) => {
 
 	return res.status(200).json({
 		success: response ? true : false,
-		response: response ? response : "Cannot upload product images"
+		message: response ? "Added variant" : "Cannot upload product images"
 	});
 });
 
