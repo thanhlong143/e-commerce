@@ -21,6 +21,7 @@ export { default as FeatureProducts } from "./products/FeatureProducts";
 export { default as ProductCard } from "./products/ProductCard";
 export { default as ProductExtraInfoItem } from "./products/ProductExtraInfoItem";
 export { default as ProductInformation } from "./products/ProductInformation";
+export { default as CustomizeVariants } from "./products/CustomizeVariants";
 
 export { default as SelectOption } from "./search/SelectOption";
 export { default as SearchItem } from "./search/SearchItem";

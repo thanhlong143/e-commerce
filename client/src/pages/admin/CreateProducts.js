@@ -2,7 +2,6 @@ import { apiCreateProduct } from "apis";
 import { Button, InputForm, Loading, MarkdownEditor, Select } from "components";
 import React, { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
-import { RiDeleteBin2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { showModal } from "store/app/appSlice";
@@ -23,7 +22,7 @@ const CreateProducts = () => {
    const changeValue = useCallback((e) => {
       setPayload(e);
    }, [payload]);
-   const [hoverElement, setHoverElement] = useState(null);
+   
    const handlePreviewThumb = async (file) => {
       const base64Thumb = await getBase64(file);
       setPreview(prev => ({ ...prev, thumb: base64Thumb }))
@@ -32,23 +31,35 @@ const CreateProducts = () => {
    const handlePreviewImages = async (files) => {
       const imagesPreview = [];
       for (let file of files) {
-         if (file.type === "image/png" || file.type === "image/jpg") {
-            const base64 = await getBase64(file);
-            imagesPreview.push({ name: file.name, path: base64 });
-         } else {
+         if (file.type !== "image/png" && file.type !== "image/jpeg") {
             toast.warning("File is not supported")
             return;
          }
+         const base64 = await getBase64(file);
+         imagesPreview.push(base64);
+
       }
-      setPreview(prev => ({ ...prev, images: imagesPreview }))
+      setPreview(prev => ({ ...prev, images: imagesPreview }));
    }
 
+   // useEffect(() => {
+   //    if (watch("thumb")) { handlePreviewThumb(watch("thumb")[0]); }
+   // }, [watch("thumb")]);
+
+   // useEffect(() => {
+   //    if (watch("images")) { handlePreviewImages(watch("images")); }
+   // }, [watch("images")]);
+
    useEffect(() => {
-      if (watch("thumb")) { handlePreviewThumb(watch("thumb")[0]); }
+      if (watch("thumb") instanceof FileList && watch("thumb").length > 0) {
+         handlePreviewThumb(watch("thumb")[0]);
+      }
    }, [watch("thumb")]);
 
    useEffect(() => {
-      if (watch("images")) { handlePreviewImages(watch("images")); }
+      if (watch("images") instanceof FileList && watch("images").length > 0) {
+         handlePreviewImages(watch("images"));
+      }
    }, [watch("images")]);
 
    const handleCreateProduct = async (data) => {
@@ -186,18 +197,10 @@ const CreateProducts = () => {
                {preview.images.length > 0 && <div className="my-4 flex w-full gap-3 flex-wrap">
                   {preview.images?.map((el, index) => (
                      <div
-                        onMouseEnter={() => { setHoverElement(el.name) }}
                         key={index}
                         className="w-fit relative"
-                        onMouseLeave={() => { setHoverElement(null) }}
                      >
-                        <img src={el.path} alt="products" className="w-[200px] object-contain" />
-                        {/* {hoverElement === el.name && <div
-                           onClick={() => { handleRemoveImage(el.name) }}
-                           className="absolute cursor-pointer inset-0 bg-overlay flex items-center justify-center"
-                        >
-                           <RiDeleteBin2Fill size={24} color="white" />
-                        </div>} */}
+                        <img src={el} alt="products" className="w-[200px] object-contain" />
                      </div>
                   ))}
                </div>}

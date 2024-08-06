@@ -59,7 +59,17 @@ var productSchema = new mongoose.Schema({
    averageRating: {
       type: Number,
       default: 0,
-   }
+   },
+   variants: [
+      {
+         color: String,
+         price: Number,
+         thumb: String,
+         images: Array,
+         title: String,
+         sku:String
+      },
+   ],
 }, {
    timestamps: true
 });

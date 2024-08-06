@@ -58,7 +58,6 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
 
       }
       setPreview(prev => ({ ...prev, images: imagesPreview }));
-
    }
 
    useEffect(() => {

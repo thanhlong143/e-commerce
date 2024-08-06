@@ -1,5 +1,5 @@
 import { apiDeleteProduct, apiGetProducts } from "apis";
-import { InputForm, Pagination } from "components"
+import { CustomizeVariants, InputForm, Pagination } from "components"
 import useDebounce from "hooks/useDebounce";
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react"
@@ -8,6 +8,9 @@ import { createSearchParams, useLocation, useNavigate, useSearchParams } from "r
 import UpdateProduct from "./UpdateProduct";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import icons from "../../utils/icons";
+
+const { BiCustomize, BiEdit, RiDeleteBin6Line } = icons;
 
 const ManageProducts = () => {
    const navigate = useNavigate();
@@ -19,6 +22,7 @@ const ManageProducts = () => {
    const [count, setCount] = useState(0);
    const [editProduct, setEditProduct] = useState(null);
    const [update, setUpdate] = useState(false);
+   const [customizeVariant, setCustomizeVariant] = useState(null);
 
    const render = useCallback(() => {
       setUpdate(!update);
@@ -50,26 +54,23 @@ const ManageProducts = () => {
    useEffect(() => {
       const searchParams = Object.fromEntries([...params]);
       fetchProducts(searchParams);
-   }, [params,update]);
+   }, [params, update]);
 
-   const handleDeleteProduct = (pid) => { 
+   const handleDeleteProduct = (pid) => {
       Swal.fire({
          title: "Are you sure?",
          text: "I will close in 2 seconds",
          icon: "warning",
-         showCancelButton:true
-      }).then(async(result) => { 
+         showCancelButton: true
+      }).then(async (result) => {
          if (result.isConfirmed) {
             const response = await apiDeleteProduct(pid);
-            if (response.success) {
-               toast.success(response.message);
-            } else {
-               toast.error(response.message);
-            }
+            if (response.success) { toast.success(response.message); }
+            else { toast.error(response.message); }
             render();
          }
-       })
-    }
+      })
+   }
 
    return (
       <div className="w-full flex flex-col gap-4 relative">
@@ -78,6 +79,13 @@ const ManageProducts = () => {
                editProduct={editProduct}
                render={render}
                setEditProduct={setEditProduct}
+            />
+         </div>}
+         {customizeVariant && <div className="absolute inset-0 min-h-screen bg-gray-100 z-50">
+            <CustomizeVariants
+               customizeVariant={customizeVariant}
+               render={render}
+               setCustomizeVariant={setCustomizeVariant}
             />
          </div>}
          <div className="h-[69px] w-full"></div>
@@ -129,8 +137,24 @@ const ManageProducts = () => {
                      <td className="text-center py-2">{el.averageRating}</td>
                      <td className="text-center py-2">{moment(el.updatedAt).format("DD/MM/YYYY")}</td>
                      <td className="text-center py-2">
-                        <span onClick={() => { setEditProduct(el) }} className="text-blue-500 hover:underline cursor-pointer px-1">Edit</span>
-                        <span onClick={() => { handleDeleteProduct(el._id) }} className="text-blue-500 hover:underline cursor-pointer px-1">Remove</span>
+                        <span
+                           onClick={() => { setEditProduct(el) }}
+                           className="text-blue-500 inline-block hover:text-red-600 cursor-pointer px-1"
+                        >
+                           <BiEdit size={20} />
+                        </span>
+                        <span
+                           onClick={() => { handleDeleteProduct(el._id) }}
+                           className="text-blue-500 inline-block hover:text-red-600 cursor-pointer px-1"
+                        >
+                           <RiDeleteBin6Line size={20} />
+                        </span>
+                        <span
+                           onClick={() => { setCustomizeVariant(el) }}
+                           className="text-blue-500 inline-block hover:text-red-600 cursor-pointer px-1"
+                        >
+                           <BiCustomize size={20} />
+                        </span>
                      </td>
                   </tr>
                ))}
