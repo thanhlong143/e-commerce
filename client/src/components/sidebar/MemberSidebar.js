@@ -1,7 +1,7 @@
 import React, { Fragment, memo, useState } from "react";
-import avatar from "assets/avatar.jpg";
-import { adminSidebar, memberSidebar } from "utils/contants";
-import { Link, NavLink } from "react-router-dom";
+import avatar from "assets/default-avatar.jpg";
+import { memberSidebar } from "utils/contants";
+import { NavLink } from "react-router-dom";
 import clsx from "clsx";
 import { AiOutlineCaretDown, AiOutlineCaretRight } from "react-icons/ai";
 import { useSelector } from "react-redux";
@@ -20,7 +20,7 @@ const MemberSidebar = () => {
    return (
       <div className="bg-white h-full py-4 w-[250px] flex-none">
          <div className="w-full flex flex-col items-center justify-center py-4">
-            <img src={current?.avatar || avatar} alt="avatar" className="w-16 h-16 object-cover" />
+            <img src={current?.avatar || avatar} alt="avatar" className="w-16 h-16 object-cover rounded-full" />
             <small>{`${current?.lastname} ${current?.firstname}`}</small>
          </div>
          <div>

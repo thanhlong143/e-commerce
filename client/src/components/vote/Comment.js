@@ -1,5 +1,5 @@
 import React from "react";
-import avatar from "assets/avatar.jpg";
+import avatar from "assets/default-avatar.jpg";
 import moment from "moment";
 import { renderStarFromNumber } from "utils/helpers";
 

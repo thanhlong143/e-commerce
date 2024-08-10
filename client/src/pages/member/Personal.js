@@ -3,23 +3,37 @@ import { Button, InputForm } from "components"
 import moment from "moment"
 import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import avatar from "assets/default-avatar.jpg";
+import { apiUpdateCurrent } from "apis"
+import { getCurrent } from "store/user/asyncActions"
+import { toast } from "react-toastify"
 
 const Personal = () => {
-   const { register, formState: { errors }, handleSubmit, reset } = useForm()
+   const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm()
    const { current } = useSelector(state => state.user);
+   const dispatch = useDispatch();
    useEffect(() => {
       reset({
          firstname: current?.firstname,
          lastname: current?.lastname,
          mobile: current?.mobile,
          email: current?.email,
-         avatar: current?.avatar
+         avatar: current?.avatar || avatar
       })
    }, [current])
 
-   const handleUpdateInfo = (data) => {
-      console.log(data);
+   const handleUpdateInfo = async (data) => {
+      const formData = new FormData();
+      if (data.avatar.length > 0) { formData.append("avatar", data.avatar[0]) }
+      delete data.avatar;
+      for (let i of Object.entries(data)) { formData.append(i[0], i[1]) }
+
+      const response = await apiUpdateCurrent(formData);
+      if (response.success) {
+         dispatch(getCurrent());
+         toast.success(response.message)
+      } else { toast.error(response.message) }
    }
 
    return (
@@ -52,7 +66,11 @@ const Personal = () => {
                errors={errors}
                id={"email"}
                validate={{
-                  required: "Need fill"
+                  required: "Need fill",
+                  pattern: {
+                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                     message: "Địa chỉ email không hợp lệ"
+                  }
                }}
             />
             <InputForm
@@ -61,7 +79,11 @@ const Personal = () => {
                errors={errors}
                id={"mobile"}
                validate={{
-                  required: "Need fill"
+                  required: "Need fill",
+                  pattern: {
+                     value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                     message: "Số điện thoại không hợp lệ"
+                  }
                }}
             />
             <div className="flex items-center gap-2">
@@ -76,9 +98,16 @@ const Personal = () => {
                <span>Created At:</span>
                <span>{moment(current?.createdAt).fromNow()}</span>
             </div>
-            <div className="w-full flex justify-end">
-               <Button type="submit" >Update Info</Button>
+            <div className="flex flex-col gap-2">
+               <span className="font-medium">Profile Image:</span>
+               <label htmlFor="file">
+                  <img src={current?.avatar || avatar} alt="avatar" className="w-20 h-20 ml-8 object-cover rounded-full" />
+               </label>
+               <input type="file" id="file" {...register("avatar")} hidden />
             </div>
+            {isDirty && <div className="w-full flex justify-end">
+               <Button type="submit" >Update Info</Button>
+            </div>}
          </form>
       </div>
    )

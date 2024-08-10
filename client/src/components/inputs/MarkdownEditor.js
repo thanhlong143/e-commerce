@@ -1,4 +1,4 @@
-import React, { memo, useRef } from "react";
+import React, { memo } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 
 const MarkdownEditor = ({ label, value, changeValue, name, invalidFields, setInvalidFields, setIsFocusDescription }) => {

@@ -15,7 +15,7 @@ const Header = () => {
    useEffect(() => {
       const handleClickOptions = (e) => {
          const profile = document.getElementById("profile");
-         if (!profile.contains(e.target)) {
+         if (!profile?.contains(e.target)) {
             setIsShowOption(false);
          }
       }

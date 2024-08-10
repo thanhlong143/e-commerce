@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import icons from "utils/icons";
 import { logout, clearMessage } from "store/user/userSlice";
 import Swal from "sweetalert2";
+import defaultAvatar from "assets/default-avatar.jpg";
 
 const { AiOutlineLogout } = icons;
 
@@ -39,8 +40,11 @@ const TopHeader = () => {
          <div className="w-main flex items-center justify-between text-xs text-white">
             <span>ORDER ONLINE OR CALL US (+1800) 000 8808</span>
             {isLoggedIn && current
-               ? <div className="flex gap-4 text-sm items-center">
-                  <span>{`Xin chào, ${current?.lastname} ${current?.firstname}`}</span>
+               ? <div className="flex text-sm gap-1 items-center justify-center">
+                  <span className="flex items-center justify-center gap-1">
+                     <img className="w-7 h-7 object-cover rounded-full" src={current?.avatar || defaultAvatar} />
+                     {`${current?.lastname} ${current?.firstname}`}
+                  </span>
                   <span
                      onClick={() => dispatch(logout())}
                      className="hover:rounded-full hover:bg-gray-200 hover:text-main cursor-pointer p-2"

@@ -5,6 +5,7 @@ import * as actions from "store/products/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 import smallBanner1 from "assets/small-banner-1.png";
 import smallBanner2 from "assets/small-banner-2.png";
+import clsx from "clsx";
 
 const tabs = [
    { id: 1, name: "best seller" },
@@ -17,6 +18,7 @@ const BestSeller = () => {
    const [products, setProducts] = useState(null);
    const dispatch = useDispatch();
    const { newProducts } = useSelector(state => state.products);
+   const { isShowModal } = useSelector(state => state.app);
 
    useEffect(() => {
       const fetchProducts = async () => {
@@ -40,7 +42,7 @@ const BestSeller = () => {
    }, [activedTab, bestSellers, newProducts]);
 
    return (
-      <div>
+      <div className={clsx(isShowModal ? "hidden" : "block")}>
          <div className="flex text-[20px] ml-[-32px]">
             {tabs.map(el => (
                <span key={el.id}

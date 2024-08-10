@@ -18,7 +18,7 @@ function App() {
       dispatch(getCategories());
    }, [dispatch])
    return (
-      <div className="font-main relative">
+      <div className="font-main h-screen">
          {isShowModal && <Modal>{modalChildren}</Modal>}
          <Routes>
             <Route path={path.PUBLIC} element={<Public />} >
@@ -40,7 +40,7 @@ function App() {
             </Route>
             <Route path={path.MEMBER} element={<MemberLayout />} >
                <Route path={path.PERSONAL} element={<Personal />} />
-               <Route path={path.MY_CART} element={<MyCart />} />
+               <Route path={path.MY_CART} element={<MyCart id="cart" />} />
                <Route path={path.BUY_HISTORY} element={<BuyHistory />} />
                <Route path={path.WISHLIST} element={<Wishlist />} />
             </Route>
