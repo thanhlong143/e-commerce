@@ -1,7 +1,7 @@
 import React from "react";
-import { Sidebar, Banner, BestSeller, DealDaily, FeatureProducts, CustomSlider } from "../../components";
+import { Sidebar, Banner, BestSeller, DealDaily, FeatureProducts, CustomSlider } from "components";
 import { useSelector } from "react-redux";
-import icons from "../../utils/icons";
+import icons from "utils/icons";
 
 const { IoIosArrowForward } = icons;
 

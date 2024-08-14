@@ -1,4 +1,4 @@
-import SelectQuantity from "components/common/SelectQuantity";
+import SelectQuantity from "../common/SelectQuantity";
 import withBaseComponent from "hocs/withBaseComponent";
 import React, { useEffect, useState } from "react"
 import { updateCart } from "store/user/userSlice";

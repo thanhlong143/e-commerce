@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Login, Home, Public, Products, ProductDetails, Blogs, Services, FAQ, FinalRegister, ResetPassword, CartDetails } from "./pages/public"
 import { AdminLayout, ManageOrders, ManageProducts, ManageUsers, CreateProducts, Dashboard } from 'pages/admin'
-import { MemberLayout, Personal, BuyHistory, MyCart, Wishlist, Checkout } from 'pages/member'
+import { MemberLayout, Personal, BuyHistory, Wishlist, Checkout } from 'pages/member'
 import path from "utils/path";
 import { getCategories } from "store/app/asyncActions";
 import { useDispatch, useSelector } from "react-redux";

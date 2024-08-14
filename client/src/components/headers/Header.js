@@ -3,7 +3,7 @@ import logo from "assets/logo.png";
 import icons from "utils/icons";
 import { Link } from "react-router-dom";
 import path from "utils/path";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { logout } from "store/user/userSlice";
 import withBaseComponent from "hocs/withBaseComponent";
 import { showCart } from "store/app/appSlice";

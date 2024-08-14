@@ -1,6 +1,6 @@
 import { apiAddVariant } from "apis";
-import Button from "components/buttons/Button";
-import Loading from "components/common/Loading";
+import Button from "../buttons/Button";
+import Loading from "../common/Loading";
 import InputForm from "components/inputs/InputForm";
 import React, { memo, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";

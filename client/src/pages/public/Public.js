@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { Footer, Header, Navigation, TopHeader } from "../../components";
+import { Footer, Header, Navigation, TopHeader } from "components";
 
 const Public = () => {
    return (

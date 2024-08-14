@@ -1,5 +1,5 @@
 import { apiRemoveInCart } from "apis"
-import Button from "components/buttons/Button"
+import Button from "../buttons/Button"
 import withBaseComponent from "hocs/withBaseComponent"
 import React, { memo } from "react"
 import { AiFillCloseCircle } from "react-icons/ai"

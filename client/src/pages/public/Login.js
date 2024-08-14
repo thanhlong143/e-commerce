@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, InputField, Loading } from "components";
-import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "apis/user";
+import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "apis";
 import Swal from "sweetalert2";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import path from "utils/path";

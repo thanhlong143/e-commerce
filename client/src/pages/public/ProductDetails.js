@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createSearchParams, useParams } from "react-router-dom";
-import { apiGetProduct, apiGetProducts, apiUpdateCart } from "../../apis";
-import { Breadcrumb, Button, CustomSlider, ProductExtraInfoItem, ProductInformation, SelectQuantity } from "../../components";
+import { apiGetProduct, apiGetProducts, apiUpdateCart } from "apis";
+import { Breadcrumb, Button, CustomSlider, ProductExtraInfoItem, ProductInformation, SelectQuantity } from "components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
-import { formatMoney, formatRoundPrice, renderStarFromNumber } from "../../utils/helpers";
-import { productExtraInformation } from "../../utils/contants";
+import { formatMoney, formatRoundPrice, renderStarFromNumber } from "utils/helpers";
+import { productExtraInformation } from "utils/contants";
 import DOMPurify from "dompurify";
 import clsx from "clsx";
 import { useSelector } from "react-redux";

@@ -9,7 +9,6 @@ import { showModal } from "store/app/appSlice";
 import { ProductDetails } from "pages/public";
 import withBaseComponent from "hocs/withBaseComponent";
 import { apiUpdateCart } from "apis";
-import { colors } from "utils/contants";
 import { toast } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { useSelector } from "react-redux";

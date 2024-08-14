@@ -5,10 +5,10 @@ import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import UpdateProduct from "./UpdateProduct";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import icons from "../../utils/icons";
+import icons from "utils/icons";
+import UpdateProduct from "./UpdateProduct";
 
 const { BiCustomize, BiEdit, RiDeleteBin6Line } = icons;
 
