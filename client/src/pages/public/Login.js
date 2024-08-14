@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button, InputField, Loading } from "components";
 import { apiFinalRegister, apiForgotPassword, apiLogin, apiRegister } from "apis/user";
 import Swal from "sweetalert2";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import path from "utils/path";
 import { useDispatch } from "react-redux";
 import { login } from "store/user/userSlice";
@@ -26,6 +26,9 @@ const Login = () => {
    const [invalidFields, setInvalidFields] = useState("");
    const [isRegister, setIsRegister] = useState(false);
    const [isForgotPassword, setIsForgotPassword] = useState(false);
+   
+   const[searchParams]=useSearchParams()
+   
    const resetPayload = () => {
       setPayload({
          email: "",
@@ -64,7 +67,7 @@ const Login = () => {
             const result = await apiLogin(data);
             if (result.success) {
                dispatch(login({ isLoggedIn: true, access_token: result.accessToken, userData: result.userData }));
-               navigate(`/${path.HOME}`);
+               searchParams.get("redirect") ? navigate(searchParams.get("redirect")) : navigate(`/${path.HOME}`);
             } else {
                Swal.fire("Oops", result.message, "error");
             }
@@ -103,7 +106,7 @@ const Login = () => {
          </div>}
          {isForgotPassword && <div className="absolute animate-slide-left top-0 left-0 bottom-0 right-0 bg-white flex flex-col items-center py-8 z-50">
             <div className="flex flex-col gap-4">
-               <label htmlFor="email">Enter your email: </label>
+               <label htmlFor="email">Nhập địa chỉ email của bản: </label>
                <input type="text" id="email"
                   className="w-[800px] pb-2 border-b outline-none placeholder:text-sm"
                   placeholder="youremail@gmail.com"
@@ -119,22 +122,24 @@ const Login = () => {
          <div src="" alt="" className="w-full h-full object-cover bg-main" />
          <div className="absolute top-0 bottom-0 items-center justify-center flex">
             <div className="p-8 bg-white flex flex-col rounded-md min-w-[500px]">
-               <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? "Register" : "Login"}</h1>
+               <h1 className="text-[28px] font-semibold text-main mb-8">{isRegister ? "Đăng ký" : "Đăng nhập"}</h1>
                {isRegister && <div className="flex items-center gap-2">
-                  <InputField
-                     value={payload.firstname}
-                     setValue={setPayload}
-                     nameKey="firstname"
-                     invalidFields={invalidFields}
-                     setInvalidFields={setInvalidFields}
-                  />
                   <InputField
                      value={payload.lastname}
                      setValue={setPayload}
+                     placeholder={"Họ"}
                      nameKey="lastname"
                      invalidFields={invalidFields}
                      setInvalidFields={setInvalidFields}
                   />
+                  <InputField
+                     value={payload.firstname}
+                     setValue={setPayload}
+                     placeholder={"Tên"}
+                     nameKey="firstname"
+                     invalidFields={invalidFields}
+                     setInvalidFields={setInvalidFields}
+                  />                  
                </div>}
                <InputField
                   value={payload.email}
@@ -146,6 +151,7 @@ const Login = () => {
                {isRegister && <InputField
                   value={payload.mobile}
                   setValue={setPayload}
+                  placeholder={"Số điện thoại"}
                   nameKey="mobile"
                   invalidFields={invalidFields}
                   setInvalidFields={setInvalidFields}
@@ -153,6 +159,7 @@ const Login = () => {
                <InputField
                   value={payload.password}
                   setValue={setPayload}
+                  placeholder={"Mật khẩu"}
                   nameKey="password"
                   type="password"
                   invalidFields={invalidFields}
@@ -162,23 +169,23 @@ const Login = () => {
                   handleOnClick={handleSubmit}
                   fw
                >
-                  {isRegister ? "Register" : "Login"}
+                  {isRegister ? "Đăng ký" : "Đăng nhập"}
                </Button>
                <div className="flex items-center justify-between my-2 w-full text-sm">
                   {!isRegister && <span onClick={() => setIsForgotPassword(true)} className="text-blue-500 hover:underline cursor-pointer">
-                     Forgot your password?
+                     Quên mật khẩu?
                   </span>}
                   {!isRegister && <span
                      className="text-blue-500 hover:underline cursor-pointer"
                      onClick={() => { setIsRegister(true) }}
-                  >Create account</span>}
+                  >Tạo tài khoản mới</span>}
                   {isRegister && <span
                      className="text-blue-500 hover:underline cursor-pointer w-full text-center"
                      onClick={() => { setIsRegister(false) }}
-                  >Go login</span>}
+                  >Đi đến trang đăng nhập</span>}
                </div>
                <Link className="text-blue-500 text-sm hover:underline cursor-pointer w-full text-center" to={`/${path.HOME}`}>
-                  Go home?
+                  Đi đến trang chủ?
                </Link>
             </div>
          </div>

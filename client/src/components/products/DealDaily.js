@@ -77,7 +77,7 @@ const DealDaily = () => {
          </div>
          <div className="w-full flex flex-col items-center pt-8 px-4 gap-2">
             <img
-               src={dealDaily?.thumb || defaultThumb}
+               src={dealDaily?.thumbnail || defaultThumb}
                alt=""
                className="w-full object-contain"
             />

@@ -10,19 +10,23 @@ const { users } = require("../utils/contants");
 
 const register = asyncHandler(async (req, res) => {
    const { email, password, firstname, lastname, mobile } = req.body;
+   const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/g;
+   const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
    if (!email || !password || !firstname || !lastname || !mobile) {
       return res.status(400).json({
          success: false,
          message: "Missing inputs"
       });
    }
+   if (!mobile.match(phoneRegex)) throw new Error("This phone invalid");
+   if (!email.match(emailRegex)) throw new Error("This email invalid");
+
    const userEmail = await User.findOne({ email });
    const userMobile = await User.findOne({ mobile });
-   if (userEmail) {
-      throw new Error("This email address already exists");
-   } else if (userMobile) {
-      throw new Error("This phone number address already exists");
-   } else {
+   if (userEmail) throw new Error("This email address already exists");
+   else if (userMobile) throw new Error("This phone number already exists");
+   else {
       const token = makeToken();
       const emailEdited = btoa(email) + "@" + token;
       const newUser = await User.create({
@@ -89,7 +93,13 @@ const login = asyncHandler(async (req, res) => {
 
 const getCurrent = asyncHandler(async (req, res) => {
    const { _id } = req.user;
-   const user = await User.findById(_id).select("-refreshToken -password");
+   const user = await User.findById(_id).select("-refreshToken -password").populate({
+      path: "cart",
+      populate: {
+         path: "product",
+         select: "title thumbnail price"
+      }
+   });
    return res.status(200).json({
       success: user ? true : false,
       result: user ? user : "User not found"
@@ -262,33 +272,50 @@ const updateUserAddress = asyncHandler(async (req, res) => {
 });
 
 const updateUserCart = asyncHandler(async (req, res) => {
-   const _id = req.user._id;
-   const { pid, quantity, color } = req.body;
+   const { _id } = req.user;
+   const { pid, quantity = 1, color, price, thumbnail, title } = req.body;
+   if (!pid || !color) { throw new Error("Missing inputs") }
 
-   if (!pid || !quantity || !color) {
-      throw new Error("Missing inputs")
-   }
-   const user = await User.findById(_id);
-   const alreadyProduct = user?.cart?.find(element => element.product.toString() === pid);
+   const user = await User.findById(_id).select("cart");
+   const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color);
    if (alreadyProduct) {
-      if (alreadyProduct.color === color) {
-         const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, { $set: { "cart.$.quantity": quantity } }, { new: true });
-         return res.status(200).json({
-            success: response ? true : false,
-            updatedUser: response ? response : "Something went wrong!"
-         });
-      } else {
-         const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true });
-         return res.status(200).json({
-            success: response ? true : false,
-            updatedUser: response ? response : "Something went wrong!"
-         });
-      }
-   } else {
-      const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color } } }, { new: true });
+      const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, {
+         $set: {
+            "cart.$.quantity": quantity,
+            "cart.$.price": price,
+            "cart.$.thumbnail": thumbnail,
+            "cart.$.title": title,
+         }
+      },
+         { new: true });
       return res.status(200).json({
          success: response ? true : false,
-         updatedUser: response ? response : "Something went wrong!"
+         message: response ? "Updated your cart" : "Something went wrong!"
+      });
+   } else {
+      const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color, price, thumbnail, title } } }, { new: true });
+      return res.status(200).json({
+         success: response ? true : false,
+         message: response ? "Updated your cart" : "Something went wrong!"
+      });
+   }
+});
+
+const removeProductInCart = asyncHandler(async (req, res) => {
+   const { _id } = req.user;
+   const { pid, color } = req.params;
+   const user = await User.findById(_id).select("cart");
+   const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color);
+   if (!alreadyProduct) {
+      return res.status(200).json({
+         success: true,
+         message: "This product is not in your shopping cart."
+      });
+   } else {
+      const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid, color: color } } }, { new: true });
+      return res.status(200).json({
+         success: response ? true : false,
+         message: response ? "This product has been successfully removed from your cart." : "Something went wrong!"
       });
    }
 });
@@ -317,5 +344,6 @@ module.exports = {
    updateUserCart,
    finalRegister,
    createUsers,
+   removeProductInCart,
 
 }

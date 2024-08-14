@@ -15,8 +15,9 @@ router.put("/resetpassword", ctrls.resetPassword);
 router.get("/", [verifyAccessToken, isAdmin], ctrls.getUsers);
 router.delete("/:uid", [verifyAccessToken, isAdmin], ctrls.deleteUsers);
 router.put("/current", verifyAccessToken, uploader.single("avatar"), ctrls.updateUser);
-router.put("/current/address", [verifyAccessToken], ctrls.updateUserAddress);
-router.put("/current/cart", [verifyAccessToken], ctrls.updateUserCart);
+router.put("/address", [verifyAccessToken], ctrls.updateUserAddress);
+router.put("/cart", [verifyAccessToken], ctrls.updateUserCart);
+router.delete("/remove-in-cart/:pid/:color", [verifyAccessToken], ctrls.removeProductInCart);
 router.put("/:uid", [verifyAccessToken, isAdmin], ctrls.updateUserByAdmin);
 
 module.exports = router;

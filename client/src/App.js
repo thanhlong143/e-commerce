@@ -1,26 +1,31 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Login, Home, Public, Products, ProductDetails, Blogs, Services, FAQ, FinalRegister, ResetPassword } from "./pages/public"
+import { Login, Home, Public, Products, ProductDetails, Blogs, Services, FAQ, FinalRegister, ResetPassword, CartDetails } from "./pages/public"
 import { AdminLayout, ManageOrders, ManageProducts, ManageUsers, CreateProducts, Dashboard } from 'pages/admin'
-import { MemberLayout, Personal, BuyHistory, MyCart, Wishlist } from 'pages/member'
+import { MemberLayout, Personal, BuyHistory, MyCart, Wishlist, Checkout } from 'pages/member'
 import path from "utils/path";
 import { getCategories } from "store/app/asyncActions";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Modal } from "components";
+import { Cart, Modal } from "components";
+import { showCart } from "store/app/appSlice";
 
 function App() {
    const dispatch = useDispatch();
-   const { isShowModal, modalChildren } = useSelector(state => state.app);
+   const { isShowModal, modalChildren, isShowCart } = useSelector(state => state.app);
 
    useEffect(() => {
       dispatch(getCategories());
    }, [dispatch])
    return (
-      <div className="font-main h-screen">
+      <div className="font-main h-screen relative">
+         {isShowCart && <div onClick={() => { dispatch(showCart()) }} className="absolute inset-0 z-50 bg-overlay flex justify-end">
+            <Cart />
+         </div>}
          {isShowModal && <Modal>{modalChildren}</Modal>}
          <Routes>
+            <Route path={path.CHECKOUT} element={<Checkout />} />
             <Route path={path.PUBLIC} element={<Public />} >
                <Route path={path.HOME} element={<Home />} />
                <Route path={path.PRODUCTS} element={<Products />} />
@@ -40,7 +45,7 @@ function App() {
             </Route>
             <Route path={path.MEMBER} element={<MemberLayout />} >
                <Route path={path.PERSONAL} element={<Personal />} />
-               <Route path={path.MY_CART} element={<MyCart id="cart" />} />
+               <Route path={path.MY_CART} element={<CartDetails />} />
                <Route path={path.BUY_HISTORY} element={<BuyHistory />} />
                <Route path={path.WISHLIST} element={<Wishlist />} />
             </Route>

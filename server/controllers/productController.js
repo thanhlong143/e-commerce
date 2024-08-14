@@ -5,14 +5,14 @@ const makeSku = require("uniqid");
 
 const createProduct = asyncHandler(async (req, res) => {
 	const { title, price, description, brand, category, color } = req.body;
-	const thumb = req.files?.thumb[0]?.path;
+	const thumbnail = req.files?.thumbnail[0]?.path;
 	const images = req.files?.images?.map(el => el.path);
 
 	if (!(title && price && description && brand && category && color)) {
 		throw new Error("Missing inputs");
 	}
 	req.body.slug = slugify(title);
-	if (thumb) { req.body.thumb = thumb }
+	if (thumbnail) { req.body.thumbnail = thumbnail }
 	if (images) { req.body.images = images }
 	const newProduct = await Product.create(req.body);
 	return res.status(200).json({
@@ -96,7 +96,7 @@ const getProducts = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
 	const { pid } = req.params;
 	const files = req?.files;
-	if (files?.thumb) { req.body.thumb = files?.thumb[0]?.path; }
+	if (files?.thumbnail) { req.body.thumbnail = files?.thumbnail[0]?.path; }
 	if (files?.images) { req.body.images = files?.images?.map(el => el.path); }
 	if (req.body && req.body.title) { req.body.slug = slugify(req.body.title); }
 	const updatedProduct = await Product.findByIdAndUpdate(pid, req.body, { new: true });
@@ -170,13 +170,13 @@ const uploadProductImages = asyncHandler(async (req, res) => {
 const addVariant = asyncHandler(async (req, res) => {
 	const { pid } = req.params;
 	const { title, price, color } = req.body;
-	const thumb = req.files?.thumb[0]?.path;
+	const thumbnail = req.files?.thumbnail[0]?.path;
 	const images = req.files?.images?.map(el => el.path);
 
 	if (!(title && price && color)) { throw new Error("Missing inputs"); }
 	const response = await Product.findByIdAndUpdate(
 		pid,
-		{ $push: { variants: { color,price,title,thumb,images,sku:makeSku().toUpperCase() } } },
+		{ $push: { variants: { color,price,title,thumbnail,images,sku:makeSku().toUpperCase() } } },
 		{ new: true }
 	);
 

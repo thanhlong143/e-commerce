@@ -21,7 +21,7 @@ var productSchema = new mongoose.Schema({
       type: String,
       required: true,
    },
-   thumb: {
+   thumbnail: {
       type: String,
       required: true,
    },
@@ -64,7 +64,7 @@ var productSchema = new mongoose.Schema({
       {
          color: String,
          price: Number,
-         thumb: String,
+         thumbnail: String,
          images: Array,
          title: String,
          sku:String

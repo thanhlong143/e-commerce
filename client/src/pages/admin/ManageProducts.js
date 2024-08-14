@@ -126,7 +126,7 @@ const ManageProducts = () => {
                   <tr className="border-b" key={el._id}>
                      <td className="text-center py-2">{(+params.get("page") > 1 ? +params.get("page") - 1 : 0) * process.env.REACT_APP_LIMIT + index + 1}</td>
                      <td className="text-center py-2">
-                        <img src={el.thumb} alt="thumb" className="w-12 h-12 object-cover" />
+                        <img src={el.thumbnail} alt="thumbnail" className="w-12 h-12 object-cover" />
                      </td>
                      <td className="text-center py-2">{el.title}</td>
                      <td className="text-center py-2">{el.brand}</td>

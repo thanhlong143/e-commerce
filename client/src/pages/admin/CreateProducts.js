@@ -15,7 +15,7 @@ const CreateProducts = () => {
       description: ""
    });
    const [preview, setPreview] = useState({
-      thumb: null,
+      thumbnail: null,
       images: []
    });
    const [invalidFields, setInvalidFields] = useState([]);
@@ -25,7 +25,7 @@ const CreateProducts = () => {
    
    const handlePreviewThumb = async (file) => {
       const base64Thumb = await getBase64(file);
-      setPreview(prev => ({ ...prev, thumb: base64Thumb }))
+      setPreview(prev => ({ ...prev, thumbnail: base64Thumb }))
    }
 
    const handlePreviewImages = async (files) => {
@@ -43,18 +43,18 @@ const CreateProducts = () => {
    }
 
    // useEffect(() => {
-   //    if (watch("thumb")) { handlePreviewThumb(watch("thumb")[0]); }
-   // }, [watch("thumb")]);
+   //    if (watch("thumbnail")) { handlePreviewThumb(watch("thumbnail")[0]); }
+   // }, [watch("thumbnail")]);
 
    // useEffect(() => {
    //    if (watch("images")) { handlePreviewImages(watch("images")); }
    // }, [watch("images")]);
 
    useEffect(() => {
-      if (watch("thumb") instanceof FileList && watch("thumb").length > 0) {
-         handlePreviewThumb(watch("thumb")[0]);
+      if (watch("thumbnail") instanceof FileList && watch("thumbnail").length > 0) {
+         handlePreviewThumb(watch("thumbnail")[0]);
       }
-   }, [watch("thumb")]);
+   }, [watch("thumbnail")]);
 
    useEffect(() => {
       if (watch("images") instanceof FileList && watch("images").length > 0) {
@@ -69,7 +69,7 @@ const CreateProducts = () => {
          const finalPayload = { ...data, ...payload }
          const formData = new FormData();
          for (let i of Object.entries(finalPayload)) { formData.append(i[0], i[1]); }
-         if (finalPayload.thumb) { formData.append("thumb", finalPayload.thumb[0]) }
+         if (finalPayload.thumbnail) { formData.append("thumbnail", finalPayload.thumbnail[0]) }
          if (finalPayload.images) {
             for (let image of finalPayload.images) {
                formData.append("images", image)
@@ -82,7 +82,7 @@ const CreateProducts = () => {
             toast.success(response.message);
             reset();
             setPayload({
-               thumb: "",
+               thumbnail: "",
                image: []
             })
          } else { toast.error(response.message); }
@@ -173,16 +173,16 @@ const CreateProducts = () => {
                   setInvalidFields={setInvalidFields}
                />
                <div className="flex flex-col gap-2 mt-8">
-                  <label className="font-semibold" htmlFor="thumb">Upload thumb</label>
+                  <label className="font-semibold" htmlFor="thumbnail">Upload thumbnail</label>
                   <input
                      type="file"
-                     id="thumb"
-                     {...register("thumb", { required: "Vui lòng chọn ảnh" })}
+                     id="thumbnail"
+                     {...register("thumbnail", { required: "Vui lòng chọn ảnh" })}
                   />
-                  {errors["thumb"] && <small className="text-xs text-red-500">{errors["thumb"]?.message}</small>}
+                  {errors["thumbnail"] && <small className="text-xs text-red-500">{errors["thumbnail"]?.message}</small>}
                </div>
-               {preview.thumb && <div className="my-4">
-                  <img src={preview.thumb} alt="thumb" className="w-[200px] object-contain" />
+               {preview.thumbnail && <div className="my-4">
+                  <img src={preview.thumbnail} alt="thumbnail" className="w-[200px] object-contain" />
                </div>}
                <div className="flex flex-col gap-2 mt-8">
                   <label className="font-semibold" htmlFor="products">Upload images of product</label>

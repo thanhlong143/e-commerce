@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { apiGetProduct, apiGetProducts } from "../../apis";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { createSearchParams, useParams } from "react-router-dom";
+import { apiGetProduct, apiGetProducts, apiUpdateCart } from "../../apis";
 import { Breadcrumb, Button, CustomSlider, ProductExtraInfoItem, ProductInformation, SelectQuantity } from "../../components";
 import Slider from "react-slick";
 import ReactImageMagnify from "react-image-magnify";
@@ -8,6 +8,12 @@ import { formatMoney, formatRoundPrice, renderStarFromNumber } from "../../utils
 import { productExtraInformation } from "../../utils/contants";
 import DOMPurify from "dompurify";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { getCurrent } from "store/user/asyncActions";
+import withBaseComponent from "hocs/withBaseComponent";
+import path from "utils/path";
+import Swal from "sweetalert2";
 
 const settings = {
    dots: false,
@@ -17,8 +23,10 @@ const settings = {
    slidesToScroll: 1
 };
 
-const ProductDetails = ({ isQuickView, data }) => {
+const ProductDetails = ({ isQuickView, data, dispatch, navigate, location }) => {
+   const titleRef = useRef();
    const params = useParams();
+   const { current } = useSelector(state => state.user);
    const [product, setProduct] = useState(null);
    const [currentImage, setCurrentImage] = useState(null);
    const [quantity, setQuantity] = useState(1);
@@ -29,7 +37,7 @@ const ProductDetails = ({ isQuickView, data }) => {
    const [category, setCategory] = useState(null);
    const [currentProduct, setCurrentProduct] = useState({
       title: "",
-      thumb: "",
+      thumbnail: "",
       images: [],
       price: "",
       color: "",
@@ -50,7 +58,7 @@ const ProductDetails = ({ isQuickView, data }) => {
       const response = await apiGetProduct(pid);
       if (response.success) {
          setProduct(response.productData);
-         setCurrentImage(response.productData?.thumb);
+         setCurrentImage(response.productData?.thumbnail);
       }
    }
 
@@ -58,13 +66,21 @@ const ProductDetails = ({ isQuickView, data }) => {
       if (variant) {
          setCurrentProduct({
             title: product?.variants?.find(el => el.sku === variant)?.title,
-            thumb: product?.variants?.find(el => el.sku === variant)?.thumb,
+            thumbnail: product?.variants?.find(el => el.sku === variant)?.thumbnail,
             images: product?.variants?.find(el => el.sku === variant)?.images,
             price: product?.variants?.find(el => el.sku === variant)?.price,
             color: product?.variants?.find(el => el.sku === variant)?.color,
          })
+      } else {
+         setCurrentProduct({
+            title: product?.title,
+            thumbnail: product?.thumbnail,
+            images: product?.images || [],
+            price: product?.price,
+            color: product?.color,
+         })
       }
-   }, [variant])
+   }, [variant, product])
 
    const fetchProducts = async () => {
       const response = await apiGetProducts({ category });
@@ -78,7 +94,8 @@ const ProductDetails = ({ isQuickView, data }) => {
          fetchProductData();
          fetchProducts();
       }
-      window.scrollTo(0, 0);
+      // window.scrollTo(0, 0);
+      titleRef.current.scrollIntoView({ block: "center" })
    }, [pid]);
 
    useEffect(() => {
@@ -110,10 +127,42 @@ const ProductDetails = ({ isQuickView, data }) => {
       e.stopPropagation();
       setCurrentImage(el);
    }
+
+   const handleAddToCart = async () => {
+      if (!current) return Swal.fire({
+         title: "Almost...",
+         text: "Please login!",
+         icon: "info",
+         cancelButtonText: "Not now!",
+         showCancelButton: true,
+         confirmButtonText: "Go login",
+      }).then((result) => {
+         if (result.isConfirmed) navigate({
+            pathname: `/${path.LOGIN}`,
+            search: createSearchParams({ redirect: location.pathname }).toString()
+         })
+      })
+
+      const response = await apiUpdateCart({
+         pid: pid,
+         quantity: quantity,
+         color: currentProduct?.color || product?.color,
+         price: currentProduct?.price || product?.price,
+         thumbnail: currentProduct?.thumbnail || product?.thumbnail,
+         title: currentProduct?.title || product?.title,
+      })
+
+      if (response.success) {
+         toast.success(response.message);
+         dispatch(getCurrent())
+      }
+      else toast.error(response.message)
+   }
+
    return (
       <div className={clsx("w-full")}>
          {!isQuickView && <div className="h-[81px] flex items-center justify-center bg-gray-100">
-            <div className="w-main">
+            <div ref={titleRef} className="w-main">
                <h3 className="font-semibold">{currentProduct.title || product?.title}</h3>
                <Breadcrumb
                   title={currentProduct.title || product?.title}
@@ -132,10 +181,10 @@ const ProductDetails = ({ isQuickView, data }) => {
                      smallImage: {
                         alt: "",
                         isFluidWidth: true,
-                        src: variant ? currentProduct?.thumb : currentImage
+                        src: variant ? currentProduct?.thumbnail : currentImage
                      },
                      largeImage: {
-                        src: variant ? currentProduct?.thumb : currentImage,
+                        src: variant ? currentProduct?.thumbnail : currentImage,
                         width: 1800,
                         height: 1500,
                      }
@@ -182,7 +231,7 @@ const ProductDetails = ({ isQuickView, data }) => {
                         onClick={() => { setVariant(null) }}
                         className={clsx("flex items-center gap-2 p-2 border cursor-pointer", !variant && "border-red-500")}
                      >
-                        <img src={product?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
+                        <img src={product?.thumbnail} alt="thumbnail" className="w-8 h-8 rounded-md object-cover" />
                         <span className="flex flex-col">
                            <span>{product?.color}</span>
                            <span className="text-sm">{product?.price}</span>
@@ -194,7 +243,7 @@ const ProductDetails = ({ isQuickView, data }) => {
                            key={index}
                            className={clsx("flex items-center gap-2 p-2 border cursor-pointer", variant === el.sku && "border-red-500")}
                         >
-                           <img src={el?.thumb} alt="thumb" className="w-8 h-8 rounded-md object-cover" />
+                           <img src={el?.thumbnail} alt="thumbnail" className="w-8 h-8 rounded-md object-cover" />
                            <span className="flex flex-col">
                               <span>{el?.color}</span>
                               <span className="text-sm">{el?.price}</span>
@@ -212,7 +261,7 @@ const ProductDetails = ({ isQuickView, data }) => {
                         handleChangeQuantity={handleChangeQuantity}
                      />
                   </div>
-                  <Button fw>
+                  <Button handleOnClick={handleAddToCart} fw>
                      Add to Cart
                   </Button>
                </div>
@@ -248,4 +297,4 @@ const ProductDetails = ({ isQuickView, data }) => {
    )
 }
 
-export default ProductDetails;
+export default withBaseComponent(ProductDetails);

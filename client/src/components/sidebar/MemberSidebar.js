@@ -1,15 +1,21 @@
 import React, { Fragment, memo, useState } from "react";
 import avatar from "assets/default-avatar.jpg";
 import { memberSidebar } from "utils/contants";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import clsx from "clsx";
 import { AiOutlineCaretDown, AiOutlineCaretRight } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import withBaseComponent from "hocs/withBaseComponent";
+import { logout } from "store/user/userSlice";
+import icons from "utils/icons";
+import logo from "assets/logo.png";
+
+const { AiOutlineLogout } = icons;
 
 const activedStyle = "px-4 py-2 flex items-center gap-2 bg-blue-500 text-gray-100";
 const notActivedStyle = "px-4 py-2 flex items-center gap-2 hover:bg-blue-100";
 
-const MemberSidebar = () => {
+const MemberSidebar = ({ dispatch }) => {
    const [actived, setActived] = useState([]);
    const { current } = useSelector(state => state.user);
    const handleShowTabs = (tabId) => {
@@ -18,7 +24,10 @@ const MemberSidebar = () => {
    }
 
    return (
-      <div className="bg-white h-full py-4 w-[250px] flex-none">
+      <div className="bg-white h-screen py-4 w-[250px] flex-none">
+         <Link to={"/"} className="flex flex-col justify-center items-center p-4 gap-2">
+            <img src={logo} alt="logo" className="w-[200px] object-contain" />
+         </Link>
          <div className="w-full flex flex-col items-center justify-center py-4">
             <img src={current?.avatar || avatar} alt="avatar" className="w-16 h-16 object-cover rounded-full" />
             <small>{`${current?.lastname} ${current?.firstname}`}</small>
@@ -53,9 +62,21 @@ const MemberSidebar = () => {
                   </div>}
                </Fragment>
             ))}
+            <NavLink to={"/"} >
+               Go Home
+            </NavLink>
+         </div>
+         <div
+            className="flex items-center justify-center py-2 my-80 text-main hover:bg-red-100 cursor-pointer"
+            onClick={() => dispatch(logout())}
+         >
+            <div className="flex items-center gap-2">
+               <span>Đăng Xuất</span>
+               <span><AiOutlineLogout /></span>
+            </div>
          </div>
       </div>
    )
 }
 
-export default memo(MemberSidebar)
+export default withBaseComponent(memo(MemberSidebar))

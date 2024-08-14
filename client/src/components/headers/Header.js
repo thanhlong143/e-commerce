@@ -1,16 +1,17 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, memo, useEffect, useState } from "react";
 import logo from "assets/logo.png";
 import icons from "utils/icons";
 import { Link } from "react-router-dom";
 import path from "utils/path";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "store/user/userSlice";
+import withBaseComponent from "hocs/withBaseComponent";
+import { showCart } from "store/app/appSlice";
 
 const { RiPhoneFill, MdEmail, BsHandbagFill, FaUserCircle } = icons;
-const Header = () => {
+const Header = ({ dispatch }) => {
    const { current } = useSelector(state => state.user);
    const [isShowOption, setIsShowOption] = useState(false);
-   const dispatch = useDispatch();
 
    useEffect(() => {
       const handleClickOptions = (e) => {
@@ -46,9 +47,9 @@ const Header = () => {
                <span>Online Support 24/7</span>
             </div>
             {current && <Fragment>
-               <div className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r">
+               <div onClick={() => { dispatch(showCart()) }} className="cursor-pointer flex items-center justify-center gap-2 px-6 border-r">
                   <BsHandbagFill color="red" />
-                  <span>0 item(s</span>
+                  <span>{`${current?.cart?.length || 0} item(s)`}</span>
                </div>
                <div
                   className="cursor-pointer flex items-center justify-center px-6 gap-2 relative"
@@ -81,4 +82,4 @@ const Header = () => {
    )
 }
 
-export default Header;
+export default withBaseComponent(memo(Header));

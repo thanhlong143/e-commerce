@@ -15,7 +15,7 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
    const dispatch = useDispatch();
    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm();
    const [preview, setPreview] = useState({
-      thumb: null,
+      thumbnail: null,
       images: []
    });
 
@@ -29,7 +29,7 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
 
    const handlePreviewThumb = async (file) => {
       const base64Thumb = await getBase64(file);
-      setPreview(prev => ({ ...prev, thumb: base64Thumb }))
+      setPreview(prev => ({ ...prev, thumbnail: base64Thumb }))
    }
 
    const handlePreviewImages = async (files) => {
@@ -51,7 +51,7 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
       else {
          const formData = new FormData();
          for (let i of Object.entries(data)) { formData.append(i[0], i[1]); }
-         if (data.thumb) { formData.append("thumb", data.thumb[0]) }
+         if (data.thumbnail) { formData.append("thumbnail", data.thumbnail[0]) }
          if (data.images) {
             for (let image of data.images) {
                formData.append("images", image)
@@ -63,16 +63,16 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
          if (response.success) {
             toast.success(response.message);
             reset();
-            setPreview({ thumb: "", images: [] })
+            setPreview({ thumbnail: "", images: [] })
          } else { toast.error(response.message); }
       }
    }
 
    useEffect(() => {
-      if (watch("thumb") instanceof FileList && watch("thumb").length > 0) {
-         handlePreviewThumb(watch("thumb")[0]);
+      if (watch("thumbnail") instanceof FileList && watch("thumbnail").length > 0) {
+         handlePreviewThumb(watch("thumbnail")[0]);
       }
-   }, [watch("thumb")]);
+   }, [watch("thumbnail")]);
 
    useEffect(() => {
       if (watch("images") instanceof FileList && watch("images").length > 0) {
@@ -134,16 +134,16 @@ const CustomizeVariants = ({ customizeVariant, setCustomizeVariant, render }) =>
                />
             </div>
             <div className="flex flex-col gap-2 mt-8">
-               <label className="font-semibold" htmlFor="thumb">Upload thumb</label>
+               <label className="font-semibold" htmlFor="thumbnail">Upload thumbnail</label>
                <input
                   type="file"
-                  id="thumb"
-                  {...register("thumb", { required: "Vui lòng chọn ảnh" })}
+                  id="thumbnail"
+                  {...register("thumbnail", { required: "Vui lòng chọn ảnh" })}
                />
-               {errors["thumb"] && <small className="text-xs text-red-500">{errors["thumb"]?.message}</small>}
+               {errors["thumbnail"] && <small className="text-xs text-red-500">{errors["thumbnail"]?.message}</small>}
             </div>
-            {preview.thumb && <div className="my-4">
-               <img src={preview.thumb} alt="thumb" className="w-[200px] object-contain" />
+            {preview.thumbnail && <div className="my-4">
+               <img src={preview.thumbnail} alt="thumbnail" className="w-[200px] object-contain" />
             </div>}
             <div className="flex flex-col gap-2 mt-8">
                <label className="font-semibold" htmlFor="products">Upload images of product</label>

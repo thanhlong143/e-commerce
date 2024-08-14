@@ -1,6 +1,6 @@
 import { RiBillLine, RiDeleteBin6Line, RiPhoneFill, RiTruckFill } from "react-icons/ri";
 import { MdEmail, MdGroups } from "react-icons/md";
-import { BsFillSuitHeartFill, BsHandbagFill, BsReplyFill, BsShieldShaded } from "react-icons/bs";
+import { BsFillCartCheckFill, BsFillCartPlusFill, BsFillSuitHeartFill, BsHandbagFill, BsReplyFill, BsShieldShaded } from "react-icons/bs";
 import { FaTty, FaUserCircle } from "react-icons/fa";
 import { AiFillHome, AiFillEye, AiOutlineMenu, AiOutlineLogout, AiFillGift, AiOutlineDown, AiOutlineDashboard } from "react-icons/ai";
 import { IoIosArrowForward, IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
@@ -33,6 +33,8 @@ const icons = {
    BiCustomize,
    BiEdit,
    RiDeleteBin6Line,
+   BsFillCartCheckFill,
+   BsFillCartPlusFill,
 
 }
 

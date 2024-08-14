@@ -5,17 +5,17 @@ import { useSelector } from "react-redux";
 import { MemberSidebar } from "components";
 
 const MemberLayout = () => {
-  const { isLoggedIn, current } = useSelector(state => state.user);
-  if (!isLoggedIn || !current) { return <Navigate to={`/${path.LOGIN}`} replace={true} /> }
+   const { isLoggedIn, current } = useSelector(state => state.user);
+   if (!isLoggedIn || !current) { return <Navigate to={`/${path.LOGIN}`} replace={true} /> }
 
-  return (
-    <div className="flex">
-      <MemberSidebar />
-      <div className="flex-auto bg-gray-100 min-h-screen">
-      <Outlet />
+   return (
+      <div className="flex">
+         <MemberSidebar />
+         <div className="flex-auto bg-gray-100 min-h-screen">
+            <Outlet />
+         </div>
       </div>
-    </div>
-  )
+   )
 }
 
 export default MemberLayout

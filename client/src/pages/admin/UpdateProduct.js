@@ -16,7 +16,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
    });
 
    const [preview, setPreview] = useState({
-      thumb: null,
+      thumbnail: null,
       images: []
    });
 
@@ -31,7 +31,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
       });
       setPayload({ description: typeof editProduct?.description === "object" ? editProduct?.description?.join(", ") : editProduct?.description })
       setPreview({
-         thumb: editProduct?.thumb || "",
+         thumbnail: editProduct?.thumbnail || "",
          images: editProduct?.images || []
       })
    }, [editProduct])
@@ -43,7 +43,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
 
    const handlePreviewThumb = async (file) => {
       const base64Thumb = await getBase64(file);
-      setPreview(prev => ({ ...prev, thumb: base64Thumb }))
+      setPreview(prev => ({ ...prev, thumbnail: base64Thumb }))
    }
 
    const handlePreviewImages = async (files) => {
@@ -61,10 +61,10 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
    }
 
    useEffect(() => {
-      if (watch("thumb") instanceof FileList && watch("thumb").length > 0) {
-         handlePreviewThumb(watch("thumb")[0]);
+      if (watch("thumbnail") instanceof FileList && watch("thumbnail").length > 0) {
+         handlePreviewThumb(watch("thumbnail")[0]);
       }
-   }, [watch("thumb")]);
+   }, [watch("thumbnail")]);
 
    useEffect(() => {
       if (watch("images") instanceof FileList && watch("images").length > 0) {
@@ -77,7 +77,7 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
       if (invalid === 0) {
          if (data.category) { data.category = categories?.find(el => el.title === data.category)?.title }
          const finalPayload = { ...data, ...payload }
-         finalPayload.thumb = data?.thumb?.length === 0 ? preview.thumb : data.thumb[0];
+         finalPayload.thumbnail = data?.thumbnail?.length === 0 ? preview.thumbnail : data.thumbnail[0];
          const formData = new FormData();
          for (let i of Object.entries(finalPayload)) { formData.append(i[0], i[1]); }
          finalPayload.images = data.images?.length === 0 ? preview.images : data.images;
@@ -180,16 +180,16 @@ const UpdateProduct = ({ editProduct, render, setEditProduct }) => {
                   value={payload.description}
                />
                <div className="flex flex-col gap-2 mt-8">
-                  <label className="font-semibold" htmlFor="thumb">Upload thumb</label>
+                  <label className="font-semibold" htmlFor="thumbnail">Upload thumbnail</label>
                   <input
                      type="file"
-                     id="thumb"
-                     {...register("thumb")}
+                     id="thumbnail"
+                     {...register("thumbnail")}
                   />
-                  {errors["thumb"] && <small className="text-xs text-red-500">{errors["thumb"]?.message}</small>}
+                  {errors["thumbnail"] && <small className="text-xs text-red-500">{errors["thumbnail"]?.message}</small>}
                </div>
-               {preview.thumb && <div className="my-4">
-                  <img src={preview.thumb} alt="thumb" className="w-[200px] object-contain" />
+               {preview.thumbnail && <div className="my-4">
+                  <img src={preview.thumbnail} alt="thumbnail" className="w-[200px] object-contain" />
                </div>}
                <div className="flex flex-col gap-2 mt-8">
                   <label className="font-semibold" htmlFor="products">Upload images of product</label>
