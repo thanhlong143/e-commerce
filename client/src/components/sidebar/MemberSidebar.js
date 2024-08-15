@@ -3,7 +3,7 @@ import avatar from "assets/default-avatar.jpg";
 import { memberSidebar } from "utils/contants";
 import { Link, NavLink } from "react-router-dom";
 import clsx from "clsx";
-import { AiOutlineCaretDown, AiOutlineCaretRight } from "react-icons/ai";
+import { AiOutlineCaretDown, AiOutlineCaretRight, AiOutlineHome } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import withBaseComponent from "hocs/withBaseComponent";
 import { logout } from "store/user/userSlice";
@@ -62,8 +62,9 @@ const MemberSidebar = ({ dispatch }) => {
                   </div>}
                </Fragment>
             ))}
-            <NavLink to={"/"} >
-               Go Home
+            <NavLink className="flex items-center gap-2 text-lg px-4 py-2 hover:bg-blue-100 cursor-pointer" to={"/"} >
+               <span><AiOutlineHome /></span>
+               <span>Go Home</span>
             </NavLink>
          </div>
          <div

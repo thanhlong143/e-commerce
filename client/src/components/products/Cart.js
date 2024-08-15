@@ -31,21 +31,23 @@ const Cart = ({ dispatch, navigate }) => {
             </span>
          </header>
          <section className="row-span-7 flex flex-col gap-3 h-full max-h-full overflow-y-auto py-3">
-            {!currentCart && <span className="text-xs italic">Your cart is empty.</span>}
-            {currentCart && currentCart?.map(el => (
-               <div key={el._id} className="flex justify-between items-center">
-                  <div className="flex gap-2">
-                     <img src={el.thumbnail} alt="thumbnail" className="w-16 h-16 object-cover" />
-                     <div className="flex flex-col gap-1">
-                        <span className="text-sm text-main">{el.title}</span>
-                        <span className="text-[10px]">{el.color}</span>
-                        <span className="text-[10px]">{`Quantity: ${el.quantity}`}</span>
-                        <span className="text-sm">{formatMoney(el.price)} VND</span>
+            {currentCart.length === 0
+               ? <span className="text-xs italic">Your cart is empty.</span>
+               : currentCart?.map(el => (
+                  <div key={el._id} className="flex justify-between items-center">
+                     <div className="flex gap-2">
+                        <img src={el.thumbnail} alt="thumbnail" className="w-16 h-16 object-cover" />
+                        <div className="flex flex-col gap-1">
+                           <span className="text-sm text-main">{el.title}</span>
+                           <span className="text-[10px]">{el.color}</span>
+                           <span className="text-[10px]">{`Quantity: ${el.quantity}`}</span>
+                           <span className="text-sm">{formatMoney(el.price)} VND</span>
+                        </div>
                      </div>
+                     <span onClick={() => removeCart(el.product?._id, el.color)} className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer"><ImBin size={16} /></span>
                   </div>
-                  <span onClick={() => removeCart(el.product?._id, el.color)} className="h-8 w-8 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer"><ImBin size={16} /></span>
-               </div>
-            ))}
+               ))
+            }
          </section>
          <div className="row-span-2 flex flex-col justify-between h-full">
             <div className="flex items-center justify-between pt-4 border-t">
@@ -53,10 +55,13 @@ const Cart = ({ dispatch, navigate }) => {
                <span>{formatMoney(currentCart?.reduce((sum, el) => sum + Number(el.price) * el.quantity, 0))} VND</span>
             </div>
             <span className="text-center text-gray-700 text-xs italic">Shipping, taxes, and discounts calculated at checkout.</span>
-            <Button handleOnClick={() => {
-               dispatch(showCart())
-               navigate(`/${path.MEMBER}/${path.CART_DETAILS}`)
-            }} fw>Shopping cart</Button>
+            {currentCart.length === 0
+               ? <Button handleOnClick={() => dispatch(showCart())} fw>Mua hàng</Button>
+               : <Button handleOnClick={() => {
+                  dispatch(showCart())
+                  navigate(`/${path.MEMBER}/${path.CART_DETAILS}`)
+               }} fw>Xem giỏ hàng</Button>
+            }
          </div>
       </div>
    )

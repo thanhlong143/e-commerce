@@ -8,6 +8,7 @@ import path from "utils/path";
 
 const CartDetails = ({ location }) => {
    const { currentCart } = useSelector(state => state.user);
+   console.log(currentCart);
 
    return (
       <div className="w-full">
@@ -40,8 +41,14 @@ const CartDetails = ({ location }) => {
                <span>Subtotal:</span>
                <span className="text-main font-bold">{(`${formatMoney(currentCart?.reduce((sum, el) => +el.price * el.quantity + sum, 0))}`)} VND</span>
             </span>
-            <span className="text-xs italic">Shipping, taxes, and discounts calculated at checkout</span>
-            <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>CHECK OUT</Link>
+            <span className="text-xs italic">{currentCart.length === 0
+               ? "Bạn chưa có sản phẩm nào trong giỏ hàng!"
+               : "Shipping, taxes, and discounts calculated at checkout"}
+            </span>
+            {currentCart.length === 0
+               ? <Link className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.HOME}`}>ĐẾN MUA HÀNG</Link>
+               : <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>CHECK OUT</Link>
+            }
          </div>
       </div>
    )
