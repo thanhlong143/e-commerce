@@ -3,23 +3,27 @@ import { Button, InputForm } from "components"
 import moment from "moment"
 import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import avatar from "assets/default-avatar.jpg";
 import { apiUpdateCurrent } from "apis"
 import { getCurrent } from "store/user/asyncActions"
 import { toast } from "react-toastify"
+import withBaseComponent from "hocs/withBaseComponent"
+import { useSearchParams } from "react-router-dom"
 
-const Personal = () => {
+const Personal = ({ navigate, dispatch }) => {
    const { register, formState: { errors, isDirty }, handleSubmit, reset } = useForm()
    const { current } = useSelector(state => state.user);
-   const dispatch = useDispatch();
+   const [searchParams] = useSearchParams();
+
    useEffect(() => {
       reset({
          firstname: current?.firstname,
          lastname: current?.lastname,
          mobile: current?.mobile,
          email: current?.email,
-         avatar: current?.avatar || avatar
+         avatar: current?.avatar || avatar,
+         address: current?.address,
       })
    }, [current])
 
@@ -32,10 +36,11 @@ const Personal = () => {
       const response = await apiUpdateCurrent(formData);
       if (response.success) {
          dispatch(getCurrent());
-         toast.success(response.message)
+         toast.success(response.message);
+         if (searchParams.get("redirect")) navigate(searchParams.get("redirect"))
       } else { toast.error(response.message) }
    }
-
+   console.log(searchParams.get("redirect"));
    return (
       <div className="w-full relative px-4">
          <header className="text-3xl font-semibold py-4 border-b border-b-blue-200">
@@ -88,6 +93,15 @@ const Personal = () => {
                         }
                      }}
                   />
+                  <InputForm
+                     label={"Address"}
+                     register={register}
+                     errors={errors}
+                     id={"address"}
+                     validate={{
+                        required: "Need fill"
+                     }}
+                  />
                </div>
                <div className="w-1/3 flex flex-col">
                   <div className="flex items-center justify-center py-16">
@@ -121,4 +135,4 @@ const Personal = () => {
    )
 }
 
-export default Personal
+export default withBaseComponent(Personal)

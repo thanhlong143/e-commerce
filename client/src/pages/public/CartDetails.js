@@ -1,14 +1,35 @@
-import { Breadcrumb, OrderItem } from "components";
+import { Breadcrumb, Button, OrderItem } from "components";
 import withBaseComponent from "hocs/withBaseComponent";
 import React from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom";
+import { createSearchParams, Link } from "react-router-dom";
+import Swal from "sweetalert2";
 import { formatMoney } from "utils/helpers";
 import path from "utils/path";
 
-const CartDetails = ({ location }) => {
-   const { currentCart } = useSelector(state => state.user);
-   console.log(currentCart);
+const CartDetails = ({ location, navigate }) => {
+   const { currentCart, current } = useSelector(state => state.user);
+
+   const handleSubmit = () => {
+      if (!current?.address) {
+         return Swal.fire({
+            icon: "info",
+            title: "Almost!",
+            text: "Vui lòng cập nhật địa chỉ giao hàng!",
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: "Cập nhật",
+            cancelButtonText: "Huỷ"
+         }).then((result) => {
+            if (result.isConfirmed) navigate({
+               pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+               search: createSearchParams({ redirect: location.pathname }).toString()
+            })
+         })
+      } else {
+         window.open(`/${path.CHECKOUT}`, "_blank")
+      }
+   }
 
    return (
       <div className="w-full">
@@ -46,9 +67,13 @@ const CartDetails = ({ location }) => {
                : "Shipping, taxes, and discounts calculated at checkout"}
             </span>
             {currentCart.length === 0
+               ? <Button>ĐẾN MUA HÀNG</Button>
+               : <Button handleOnClick={handleSubmit}>Checkout</Button>
+            }
+            {/* {currentCart.length === 0
                ? <Link className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.HOME}`}>ĐẾN MUA HÀNG</Link>
                : <Link target="_blank" className="bg-main text-white px-4 py-2 rounded-md" to={`/${path.CHECKOUT}`}>CHECK OUT</Link>
-            }
+            } */}
          </div>
       </div>
    )
