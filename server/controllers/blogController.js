@@ -56,9 +56,6 @@ const getBlogs = asyncHandler(async (req, res) => {
 const likeBlog = asyncHandler(async (req, res) => {
    const { _id } = req.user;
    const { bid } = req.params;
-   if (!bid) {
-      throw new Error("Missing inputs");
-   }
    const blog = await Blog.findById(bid);
    const alreadyDisliked = blog?.dislikes?.find(element => element.toString() === _id);
    if (alreadyDisliked) {

@@ -8,17 +8,18 @@ import icons from "utils/icons";
 import { showModal } from "store/app/appSlice";
 import { ProductDetails } from "pages/public";
 import withBaseComponent from "hocs/withBaseComponent";
-import { apiUpdateCart } from "apis";
+import { apiUpdateCart, apiUpdateWishlist } from "apis";
 import { toast } from "react-toastify";
 import { getCurrent } from "store/user/asyncActions";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import path from "utils/path";
 import { createSearchParams } from "react-router-dom";
+import clsx from "clsx";
 
 const { AiFillEye, BsFillCartCheckFill, BsFillCartPlusFill, BsFillSuitHeartFill } = icons;
 
-const Product = ({ productData, isNew, normal, navigate, dispatch, location }) => {
+const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid, className }) => {
    const [isShowOption, setIsShowOption] = useState(false);
    const { current } = useSelector(state => state.user);
 
@@ -55,7 +56,15 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
          else toast.error(response.message)
 
       }
-      if (flag === "WISHLIST") console.log("wishlist");
+      if (flag === "WISHLIST") {
+         const response = await apiUpdateWishlist(pid);
+         if (response.success) {
+            dispatch(getCurrent());
+            toast.success(response.message)
+         } else {
+            toast.error(response.message);
+         }
+      }
       if (flag === "QUICK_VIEW") {
          dispatch(showModal({
             isShowModal: true,
@@ -65,7 +74,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
    }
 
    return (
-      <div className="w-full text-base px-[10px]">
+      <div className={clsx("w-full text-base px-[10px]", className)}>
          <div
             className="w-full border p-[15px] flex flex-col items-center"
             onClick={e => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
@@ -92,7 +101,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location }) =
                      </span>
                   }
                   <span title="Add to wishlist" onClick={(e) => { handleClickOptions(e, "WISHLIST") }}>
-                     <SelectOption icon={<BsFillSuitHeartFill />} />
+                     <SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(id => id === pid) ? "red" : "white"} />} />
                   </span>
                </div>}
 

@@ -15,13 +15,15 @@ var orderSchema = new mongoose.Schema({
    status: {
       type: String,
       default: "Canceled",
-      enum: ["Canceled",  "Succeed"]
+      enum: ["Canceled", "Succeed"]
    },
    total: Number,
    orderBy: {
       type: mongoose.Types.ObjectId,
       ref: "User"
    },
+}, {
+   timestamps: true
 });
 
 //Export the model

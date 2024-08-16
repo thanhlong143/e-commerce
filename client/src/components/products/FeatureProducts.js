@@ -27,6 +27,7 @@ const FeatureProducts = () => {
             {products?.map(el => (
                <ProductCard
                   key={el._id}
+                  pid={el._id}
                   image={el.thumbnail}
                   title={el.title}
                   averageRating={el.averageRating}
