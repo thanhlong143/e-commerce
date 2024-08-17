@@ -14,6 +14,7 @@ export { default as Modal } from "./common/Modal";
 export { default as Loading } from "./common/Loading";
 export { default as Paypal } from "./common/Paypal";
 export { default as Congrat } from "./common/Congrat";
+export { default as ImageMagnifier } from "./common/ImageMagnifier";
 
 export { default as Navigation } from "./navigation/Navigation";
 

@@ -21,15 +21,14 @@ const Products = () => {
    const [sort, setSort] = useState("");
    const { category } = useParams();
 
-   const fetchProductsByCategory = async (queries) => {
-      if (category && category !== "products") queries.category = category;
-      const response = await apiGetProducts(queries);
-      if (response.success) {
-         setProducts(response);
-      }
-   }
-
    useEffect(() => {
+      const fetchProductsByCategory = async (queries) => {
+         if (category && category !== "products") queries.category = category;
+         const response = await apiGetProducts(queries);
+         if (response.success) {
+            setProducts(response);
+         }
+      }
       const queries = Object.fromEntries([...params]);
       let priceQuery = {}
       if (queries.from && queries.to) {
@@ -54,7 +53,7 @@ const Products = () => {
       const q = { ...priceQuery, ...queries };
       fetchProductsByCategory(q);
       titleRef.current.scrollIntoView({ block: "center" })
-   }, [params]);
+   }, [params, category]);
 
    const changeActiveFilter = useCallback((name) => {
       if (activeClick === name) {
@@ -75,7 +74,7 @@ const Products = () => {
             search: createSearchParams({ sort }).toString()
          })
       }
-   }, [sort]);
+   }, [sort, category, navigate]);
    return (
       <div ref={titleRef} className="w-full">
          <div className="h-[81px] flex items-center justify-center bg-gray-100">

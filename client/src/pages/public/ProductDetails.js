@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createSearchParams, useParams } from "react-router-dom";
 import { apiGetProduct, apiGetProducts, apiUpdateCart } from "apis";
-import { Breadcrumb, Button, CustomSlider, ProductExtraInfoItem, ProductInformation, SelectQuantity } from "components";
+import { Breadcrumb, Button, CustomSlider, ImageMagnifier, ProductExtraInfoItem, ProductInformation, SelectQuantity } from "components";
 import Slider from "react-slick";
-import ReactImageMagnify from "react-image-magnify";
 import { formatMoney, formatRoundPrice, renderStarFromNumber } from "utils/helpers";
 import { productExtraInformation } from "utils/contants";
 import DOMPurify from "dompurify";
@@ -22,6 +21,7 @@ const settings = {
    slidesToShow: 3,
    slidesToScroll: 1
 };
+
 
 const ProductDetails = ({ isQuickView, data, dispatch, navigate, location }) => {
    const titleRef = useRef();
@@ -159,6 +159,8 @@ const ProductDetails = ({ isQuickView, data, dispatch, navigate, location }) => 
       else toast.error(response.message)
    }
 
+
+
    return (
       <div className={clsx("w-full")}>
          {!isQuickView && <div className="h-[81px] flex items-center justify-center bg-gray-100">
@@ -177,18 +179,7 @@ const ProductDetails = ({ isQuickView, data, dispatch, navigate, location }) => 
          >
             <div className={clsx("w-2/5 flex flex-col gap-4", isQuickView && "w-1/2")}>
                <div className="h-[458px] w-[458px] border flex items-center overflow-hidden">
-                  <ReactImageMagnify {...{
-                     smallImage: {
-                        alt: "",
-                        isFluidWidth: true,
-                        src: variant ? currentProduct?.thumbnail : currentImage
-                     },
-                     largeImage: {
-                        src: variant ? currentProduct?.thumbnail : currentImage,
-                        width: 1800,
-                        height: 1500,
-                     }
-                  }} />
+                  <ImageMagnifier src={variant ? currentProduct?.thumbnail : currentImage} />
                </div>
                <div className="w-[458px]">
                   <Slider className="image-slider flex gap-2 justify-between" {...settings}>

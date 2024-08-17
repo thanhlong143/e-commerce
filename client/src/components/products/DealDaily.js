@@ -50,7 +50,7 @@ const DealDaily = ({ dispatch }) => {
 
    useEffect(() => {
       idInterval && clearInterval(idInterval);
-      if (moment(moment(dealDaily?.time).format("MM/DD/YYYY")).isBefore(moment())) {
+      if (moment(moment(dealDaily?.time, "MM-DD-YYYY")).isBefore(moment())) {
          fetchDealDaily();
       }
    }, [expireTime])
