@@ -1,9 +1,13 @@
+import withBaseComponent from "hocs/withBaseComponent";
 import React from "react";
 import { formatMoney, renderStarFromNumber } from "utils/helpers";
 
-const ProductCard = ({ image, title, averageRating, price }) => {
+const ProductCard = ({ category, image, title, averageRating, price, pid, navigate }) => {
    return (
-      <div className="w-1/3 flex-auto px-[10px] mb-[20px]">
+      <div
+         onClick={() => navigate(`/${category?.toLowerCase()}/${pid}/${title}`)}
+         className="w-1/3 flex-auto cursor-pointer px-[10px] mb-[20px]"
+      >
          <div className="flex w-full border">
             <img src={image} alt="products" className="w-[120px] object-contain p-4" />
             <div className="flex flex-col mt-[15px] items-start gap-1 w-full text-xs">
@@ -18,4 +22,4 @@ const ProductCard = ({ image, title, averageRating, price }) => {
    )
 }
 
-export default ProductCard;
+export default withBaseComponent(ProductCard);

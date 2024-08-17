@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useSearchParams, useNavigate, createSearchParams } from "react-router-dom";
 import { Breadcrumb, InputSelect, Pagination, Product, SearchItem } from "components";
 import { apiGetProducts } from "apis";
@@ -13,6 +13,7 @@ const breakpointColumnsObj = {
 };
 
 const Products = () => {
+   const titleRef = useRef();
    const navigate = useNavigate();
    const [products, setProducts] = useState(null);
    const [activeClick, setActiveClick] = useState(null);
@@ -52,7 +53,7 @@ const Products = () => {
       delete queries.from;
       const q = { ...priceQuery, ...queries };
       fetchProductsByCategory(q);
-      window.scrollTo(0, 0);
+      titleRef.current.scrollIntoView({ block: "center" })
    }, [params]);
 
    const changeActiveFilter = useCallback((name) => {
@@ -76,7 +77,7 @@ const Products = () => {
       }
    }, [sort]);
    return (
-      <div className="w-full">
+      <div ref={titleRef} className="w-full">
          <div className="h-[81px] flex items-center justify-center bg-gray-100">
             <div className="w-main">
                <h3 className="font-semibold uppercase">{category}</h3>

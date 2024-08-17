@@ -77,7 +77,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
       <div className={clsx("w-full text-base px-[10px]", className)}>
          <div
             className="w-full border p-[15px] flex flex-col items-center"
-            onClick={e => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
+            onClick={() => navigate(`/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`)}
             onMouseEnter={e => {
                e.stopPropagation()
                setIsShowOption(true)
@@ -101,7 +101,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                      </span>
                   }
                   <span title="Add to wishlist" onClick={(e) => { handleClickOptions(e, "WISHLIST") }}>
-                     <SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(id => id === pid) ? "red" : "white"} />} />
+                     <SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(id => id._id === pid) && "red"} />} />
                   </span>
                </div>}
 
