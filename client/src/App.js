@@ -23,7 +23,9 @@ function App() {
          {isShowCart && <div onClick={() => { dispatch(showCart()) }} className="absolute inset-0 z-50 bg-overlay flex justify-end">
             <Cart />
          </div>}
-         {isShowModal && <Modal>{modalChildren}</Modal>}
+         {isShowModal && <div className="absolute inset-0 z-50 flex justify-end">
+            <Modal>{modalChildren}</Modal>
+         </div>}
          <Routes>
             <Route path={path.CHECKOUT} element={<Checkout />} />
             <Route path={path.PUBLIC} element={<Public />} >

@@ -4,7 +4,8 @@ import productSlice from "./products/productSlice";
 import userSlice from "./user/userSlice";
 import storage from "redux-persist/lib/storage";
 import {
-   persistStore, persistReducer, FLUSH,
+   persistStore, persistReducer,
+   FLUSH,
    REHYDRATE,
    PAUSE,
    PERSIST,
@@ -34,17 +35,8 @@ export const store = configureStore({
       products: persistReducer(productConfig, productSlice),
       user: persistReducer(userConfig, userSlice),
    },
-   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-      serializableCheck: {
-         ignoredActions: [
-            FLUSH,
-            REHYDRATE,
-            PAUSE,
-            PERSIST,
-            PURGE,
-            REGISTER
-         ],
-      },
+   middleware: getDefaultMiddleware => getDefaultMiddleware({
+      serializableCheck: false
    }),
 });
 

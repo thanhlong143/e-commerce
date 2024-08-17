@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useState } from "react";
 import { productInfoTabs } from "utils/contants";
 import { Votebar, Button, VoteOption, Comment } from "..";
 import { renderStarFromNumber } from "utils/helpers";

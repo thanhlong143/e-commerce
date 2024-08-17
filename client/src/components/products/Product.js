@@ -86,7 +86,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                e.stopPropagation()
                setIsShowOption(false)
             }}
-         >
+      >
             <div className="w-full relative">
                {isShowOption && <div className="absolute bottom-[-10px] left-0 right-0 flex justify-center gap-2 animate-slide-top">
                   <span title="Quick view" onClick={(e) => { handleClickOptions(e, "QUICK_VIEW") }}>
@@ -101,7 +101,7 @@ const Product = ({ productData, isNew, normal, navigate, dispatch, location, pid
                      </span>
                   }
                   <span title="Add to wishlist" onClick={(e) => { handleClickOptions(e, "WISHLIST") }}>
-                     <SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(id => id._id === pid) && "red"} />} />
+                     {<SelectOption icon={<BsFillSuitHeartFill color={current?.wishlist?.some(id => id._id === pid) ? "red" : ""} />} />}
                   </span>
                </div>}
 

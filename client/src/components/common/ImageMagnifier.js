@@ -1,6 +1,6 @@
-import React, { memo, useState } from "react";
+import React, { useState } from "react";
 
-const ImageMagnifier = ({ src, width, height, magnifierHeight = 200, magnifieWidth = 200, zoomLevel = 2 }) => {
+const ImageMagnifier = ({ src, width, height, magnifierHeight = 150, magnifieWidth = 150, zoomLevel = 2 }) => {
    const [[x, y], setXY] = useState([0, 0]);
    const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
    const [showMagnifier, setShowMagnifier] = useState(false);
@@ -57,4 +57,4 @@ const ImageMagnifier = ({ src, width, height, magnifierHeight = 200, magnifieWid
    );
 }
 
-export default memo(ImageMagnifier);
+export default ImageMagnifier;
