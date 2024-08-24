@@ -8,13 +8,13 @@ const ImageMagnifier = ({ src, width, height, magnifierHeight = 150, magnifieWid
       <div
          style={{
             position: "relative",
-            height: height,
-            width: width
+            height,
+            width
          }}
       >
          <img
             src={src}
-            style={{ height: height, width: width }}
+            style={{ height, width }}
             onMouseEnter={(e) => {
                const elem = e.currentTarget;
                const { width, height } = elem.getBoundingClientRect();

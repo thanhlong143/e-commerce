@@ -7,7 +7,7 @@ import { Congrat, Paypal } from "components";
 import withBaseComponent from "hocs/withBaseComponent";
 import { getCurrent } from "store/user/asyncActions";
 
-const Checkout = ({ dispatch, navigate }) => {
+const Checkout = ({ dispatch }) => {
    const { currentCart, current } = useSelector(state => state.user);
    const [isSuccess, setIsSuccess] = useState(false);
 

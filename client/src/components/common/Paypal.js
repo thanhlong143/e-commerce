@@ -6,7 +6,6 @@ import {
 } from "@paypal/react-paypal-js";
 import { apiCreateOrder } from "apis";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -20,7 +19,7 @@ const ButtonWrapper = ({ currency, showSpinner, amount, payload, setIsSuccess })
       dispatch({
          type: "resetOptions",
          value: {
-            ...options, currency: currency
+            ...options, currency
          }
       })
    }, [currency, showSpinner]);

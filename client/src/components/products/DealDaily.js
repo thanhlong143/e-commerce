@@ -25,16 +25,6 @@ const DealDaily = ({ dispatch }) => {
       if (response.success) {
          const pr = response.products[0];
          dispatch(getDealDaily({ data: pr, time: Date.now() + 24 * 60 * 60 * 1000 }))
-         // const today = `${moment().format("MM/DD/YYYY")} 5:00:00`;
-         // const seconds = new Date(today).getTime() - new Date().getTime() + 24 * 60 * 60 * 1000;
-         // const number = secondsToHms(seconds);
-         // setHour(number.h);
-         // setMinute(number.m);
-         // setSecond(number.s);
-         // } else {
-         // setHour(0);
-         // setMinute(59);
-         // setSecond(59);
       }
    }
 
